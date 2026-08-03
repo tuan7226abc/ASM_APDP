@@ -16,17 +16,47 @@ namespace SIMS.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var viewModel = new DashboardViewModel
+            var model = new AdminDashboardViewModel
             {
-                TotalStudents = await _context.Students.CountAsync(),
-                TotalTeachers = await _context.Teachers.CountAsync(),
-                TotalCourses = await _context.Courses.CountAsync(),
-                TotalUsers = await _context.Users.CountAsync()
+                StudentCount = await _context.Students.CountAsync(),
+
+                TeacherCount = await _context.Teachers.CountAsync(),
+
+                CourseCount = await _context.Courses.CountAsync(),
+
+                UserCount = await _context.Users.CountAsync(),
+
+                ScheduleCount = await _context.Schedules.CountAsync(),
+
+                CurrentUsername = User.Identity?.Name ?? "Admin",
+
+                ChartLabels = new List<string>
+                {
+                    "Mon",
+                    "Tue",
+                    "Wed",
+                    "Thu",
+                    "Fri",
+                    "Sat",
+                    "Sun"
+                },
+
+                StudentChartData = new List<int>
+                {
+                    20,
+                    42,
+                    58,
+                    74,
+                    88,
+                    102,
+                    83
+                }
             };
 
-            return View(viewModel);
+            return View(model);
         }
     }
 }

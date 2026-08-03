@@ -1,151 +1,515 @@
-﻿@model SIMS.Models.DashboardViewModel
+﻿@using System.Text.Json
+@model SIMS.Models.AdminDashboardViewModel
 
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Admin Dashboard";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    string chartLabels =
+        JsonSerializer.Serialize(Model.ChartLabels);
+
+    string chartValues =
+        JsonSerializer.Serialize(Model.StudentChartData);
 }
 
-<div class="mb-4">
-    <h1 class="h3 mb-1">Admin Dashboard</h1>
-    <p class="text-muted">
-        Overview of the Student Information Management System
-    </p>
+<link rel="stylesheet"
+      href="~/css/admin-dashboard.css"
+      asp-append-version="true" />
+
+<div class="admin-dashboard">
+
+    <div class="dashboard-heading">
+
+        <div>
+            <h1 class="dashboard-title">
+                Admin Dashboard
+            </h1>
+
+            <p class="dashboard-description">
+                Overview of the Student Information Management System
+            </p>
+        </div>
+
+        <div class="dashboard-date">
+            <i data-feather="calendar"></i>
+
+            <span>
+                @DateTime.Now.ToString("MMMM dd, yyyy")
+            </span>
+        </div>
+
+    </div>
+
+    <div class="dashboard-stats">
+
+        <!-- Students -->
+        <div class="stat-card students">
+
+            <div class="stat-top">
+
+                <div>
+                    <div class="stat-label">
+                        Students
+                    </div>
+
+                    <div class="stat-value">
+                        @Model.StudentCount
+                    </div>
+
+                    <div class="stat-subtitle">
+                        Total students
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i data-feather="users"></i>
+                </div>
+
+            </div>
+
+            <a asp-controller="Student"
+               asp-action="Index"
+               class="stat-link">
+
+                View students
+
+                <i data-feather="arrow-right"></i>
+            </a>
+
+        </div>
+
+        <!-- Teachers -->
+        <div class="stat-card teachers">
+
+            <div class="stat-top">
+
+                <div>
+                    <div class="stat-label">
+                        Teachers
+                    </div>
+
+                    <div class="stat-value">
+                        @Model.TeacherCount
+                    </div>
+
+                    <div class="stat-subtitle">
+                        Total teachers
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i data-feather="user-check"></i>
+                </div>
+
+            </div>
+
+            <a asp-controller="Teacher"
+               asp-action="Index"
+               class="stat-link">
+
+                View teachers
+
+                <i data-feather="arrow-right"></i>
+            </a>
+
+        </div>
+
+        <!-- Courses -->
+        <div class="stat-card courses">
+
+            <div class="stat-top">
+
+                <div>
+                    <div class="stat-label">
+                        Courses
+                    </div>
+
+                    <div class="stat-value">
+                        @Model.CourseCount
+                    </div>
+
+                    <div class="stat-subtitle">
+                        Total courses
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i data-feather="book-open"></i>
+                </div>
+
+            </div>
+
+            <a asp-controller="Course"
+               asp-action="Index"
+               class="stat-link">
+
+                View courses
+
+                <i data-feather="arrow-right"></i>
+            </a>
+
+        </div>
+
+        <!-- Users -->
+        <div class="stat-card users">
+
+            <div class="stat-top">
+
+                <div>
+                    <div class="stat-label">
+                        Users
+                    </div>
+
+                    <div class="stat-value">
+                        @Model.UserCount
+                    </div>
+
+                    <div class="stat-subtitle">
+                        System accounts
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i data-feather="user-plus"></i>
+                </div>
+
+            </div>
+
+            <a asp-controller="User"
+               asp-action="Index"
+               class="stat-link">
+
+                View users
+
+                <i data-feather="arrow-right"></i>
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="dashboard-content-grid">
+
+        <!-- Chart -->
+        <div class="dashboard-panel">
+
+            <div class="dashboard-panel-body">
+
+                <div class="panel-header">
+
+                    <h2 class="panel-title">
+                        Students Overview
+                    </h2>
+
+                    <select class="period-select">
+                        <option>This Week</option>
+                        <option>This Month</option>
+                        <option>This Year</option>
+                    </select>
+
+                </div>
+
+                <div class="chart-wrapper">
+                    <canvas id="studentsChart"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Quick Links -->
+        <div class="dashboard-panel">
+
+            <div class="dashboard-panel-body">
+
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        Quick Links
+                    </h2>
+                </div>
+
+                <div class="quick-links-list">
+
+                    <a asp-controller="Student"
+                       asp-action="Create"
+                       class="quick-link">
+
+                        <span class="quick-link-content">
+
+                            <span class="quick-link-icon student">
+                                <i data-feather="user-plus"></i>
+                            </span>
+
+                            <span class="quick-link-label">
+                                Add Student
+                            </span>
+
+                        </span>
+
+                        <span class="quick-link-arrow">
+                            <i data-feather="chevron-right"></i>
+                        </span>
+
+                    </a>
+
+                    <a asp-controller="Course"
+                       asp-action="Create"
+                       class="quick-link">
+
+                        <span class="quick-link-content">
+
+                            <span class="quick-link-icon course">
+                                <i data-feather="book-open"></i>
+                            </span>
+
+                            <span class="quick-link-label">
+                                Add Course
+                            </span>
+
+                        </span>
+
+                        <span class="quick-link-arrow">
+                            <i data-feather="chevron-right"></i>
+                        </span>
+
+                    </a>
+
+                    <a asp-controller="Teacher"
+                       asp-action="Create"
+                       class="quick-link">
+
+                        <span class="quick-link-content">
+
+                            <span class="quick-link-icon teacher">
+                                <i data-feather="user-check"></i>
+                            </span>
+
+                            <span class="quick-link-label">
+                                Add Teacher
+                            </span>
+
+                        </span>
+
+                        <span class="quick-link-arrow">
+                            <i data-feather="chevron-right"></i>
+                        </span>
+
+                    </a>
+
+                    <a asp-controller="Schedule"
+                       asp-action="Index"
+                       class="quick-link">
+
+                        <span class="quick-link-content">
+
+                            <span class="quick-link-icon schedule">
+                                <i data-feather="calendar"></i>
+                            </span>
+
+                            <span class="quick-link-label">
+                                View Schedule
+                            </span>
+
+                        </span>
+
+                        <span class="quick-link-arrow">
+                            <i data-feather="chevron-right"></i>
+                        </span>
+
+                    </a>
+
+                    <a asp-controller="AccountMenu"
+                       asp-action="Settings"
+                       class="quick-link">
+
+                        <span class="quick-link-content">
+
+                            <span class="quick-link-icon settings">
+                                <i data-feather="settings"></i>
+                            </span>
+
+                            <span class="quick-link-label">
+                                System Settings
+                            </span>
+
+                        </span>
+
+                        <span class="quick-link-arrow">
+                            <i data-feather="chevron-right"></i>
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Welcome -->
+    <div class="dashboard-welcome">
+
+        <div class="welcome-icon">
+            <i data-feather="info"></i>
+        </div>
+
+        <div>
+            <h3 class="welcome-title">
+                Welcome to SIMS BTEC
+            </h3>
+
+            <p class="welcome-text">
+                Manage students, courses, teachers and schedules
+                efficiently in one place.
+            </p>
+        </div>
+
+        <div class="welcome-decoration">
+            <i data-feather="activity"></i>
+        </div>
+
+    </div>
+
 </div>
 
-<div class="row">
+@section Scripts {
 
-    <!-- Students -->
-    <div class="col-sm-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-                <div class="row">
-                    <div class="col mt-0">
-                        <h5 class="card-title">
-                            Students
-                        </h5>
-                    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
 
-                    <div class="col-auto">
-                        <div class="stat text-primary">
-                            <i class="align-middle"
-                               data-feather="user"></i>
-                        </div>
-                    </div>
-                </div>
+            if (window.feather) {
+                feather.replace();
+            }
 
-                <h1 class="mt-1 mb-3">
-                    @Model.TotalStudents
-                </h1>
+            const canvas =
+                document.getElementById("studentsChart");
 
-                <a asp-controller="Student"
-                   asp-action="Index"
-                   class="text-decoration-none">
-                    View students
-                </a>
+            if (!canvas) {
+                return;
+            }
 
-            </div>
-        </div>
-    </div>
+            const labels = @Html.Raw(chartLabels);
+            const values = @Html.Raw(chartValues);
 
-    <!-- Teachers -->
-    <div class="col-sm-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
+            const context = canvas.getContext("2d");
 
-                <div class="row">
-                    <div class="col mt-0">
-                        <h5 class="card-title">
-                            Teachers
-                        </h5>
-                    </div>
+            const gradient = context.createLinearGradient(
+                0,
+                0,
+                0,
+                300
+            );
 
-                    <div class="col-auto">
-                        <div class="stat text-primary">
-                            <i class="align-middle"
-                               data-feather="users"></i>
-                        </div>
-                    </div>
-                </div>
+            gradient.addColorStop(
+                0,
+                "rgba(37, 99, 235, 0.28)"
+            );
 
-                <h1 class="mt-1 mb-3">
-                    @Model.TotalTeachers
-                </h1>
+            gradient.addColorStop(
+                1,
+                "rgba(37, 99, 235, 0.01)"
+            );
 
-                <a asp-controller="Teacher"
-                   asp-action="Index"
-                   class="text-decoration-none">
-                    View teachers
-                </a>
+            new Chart(context, {
+                type: "line",
 
-            </div>
-        </div>
-    </div>
+                data: {
+                    labels: labels,
 
-    <!-- Courses -->
-    <div class="col-sm-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
+                    datasets: [
+                        {
+                            label: "Students",
 
-                <div class="row">
-                    <div class="col mt-0">
-                        <h5 class="card-title">
-                            Courses
-                        </h5>
-                    </div>
+                            data: values,
 
-                    <div class="col-auto">
-                        <div class="stat text-primary">
-                            <i class="align-middle"
-                               data-feather="book-open"></i>
-                        </div>
-                    </div>
-                </div>
+                            borderColor: "#2563eb",
 
-                <h1 class="mt-1 mb-3">
-                    @Model.TotalCourses
-                </h1>
+                            backgroundColor: gradient,
 
-                <a asp-controller="Course"
-                   asp-action="Index"
-                   class="text-decoration-none">
-                    View courses
-                </a>
+                            borderWidth: 3,
 
-            </div>
-        </div>
-    </div>
+                            pointRadius: 5,
 
-    <!-- Users -->
-    <div class="col-sm-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
+                            pointHoverRadius: 7,
 
-                <div class="row">
-                    <div class="col mt-0">
-                        <h5 class="card-title">
-                            Users
-                        </h5>
-                    </div>
+                            pointBackgroundColor: "#2563eb",
 
-                    <div class="col-auto">
-                        <div class="stat text-primary">
-                            <i class="align-middle"
-                               data-feather="user-check"></i>
-                        </div>
-                    </div>
-                </div>
+                            pointBorderColor: "#ffffff",
 
-                <h1 class="mt-1 mb-3">
-                    @Model.TotalUsers
-                </h1>
+                            pointBorderWidth: 2,
 
-                <span class="text-muted">
-                    System accounts
-                </span>
+                            fill: true,
 
-            </div>
-        </div>
-    </div>
+                            tension: 0.35
+                        }
+                    ]
+                },
 
-</div>
+                options: {
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    interaction: {
+                        intersect: false,
+                        mode: "index"
+                    },
+
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+
+                        tooltip: {
+                            backgroundColor: "#172033",
+
+                            padding: 12,
+
+                            cornerRadius: 9,
+
+                            displayColors: false
+                        }
+                    },
+
+                    scales: {
+                        x: {
+                            grid: {
+                                color: "rgba(160, 175, 195, 0.12)"
+                            },
+
+                            border: {
+                                display: false
+                            },
+
+                            ticks: {
+                                color: "#718096"
+                            }
+                        },
+
+                        y: {
+                            beginAtZero: true,
+
+                            grid: {
+                                color: "rgba(160, 175, 195, 0.15)"
+                            },
+
+                            border: {
+                                display: false
+                            },
+
+                            ticks: {
+                                color: "#718096",
+
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

@@ -5,141 +5,238 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<div class="mb-4">
-    <h1 class="h3 mb-1">Add User</h1>
-    <p class="text-muted">
-        Create a new system account
-    </p>
-</div>
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/user-pages.css"
+          asp-append-version="true" />
+}
 
-<div class="card">
-    <div class="card-body">
+<div class="user-page">
 
-        <form asp-action="Create" method="post">
+    <div class="user-page-header">
+
+        <div>
+            <h1 class="user-page-title">Create User</h1>
+
+            <p class="user-page-description">
+                Create a new system account and assign an access role
+            </p>
+        </div>
+
+        <a asp-controller="User"
+           asp-action="Index"
+           class="user-back-button">
+
+            <i data-feather="arrow-left"></i>
+            Back to User List
+        </a>
+
+    </div>
+
+    <div class="user-form-card">
+
+        <form asp-controller="User"
+              asp-action="Create"
+              method="post">
+
+            @Html.AntiForgeryToken()
 
             <div asp-validation-summary="ModelOnly"
-                 class="alert alert-danger">
+                 class="alert alert-danger user-alert">
             </div>
 
-            <div class="row">
+            <div class="user-form-section">
 
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Username"
-                           class="form-label">
-                        Username
-                    </label>
-
-                    <input asp-for="Username"
-                           class="form-control"
-                           autocomplete="off" />
-
-                    <span asp-validation-for="Username"
-                          class="text-danger">
+                <div class="user-form-section-title">
+                    <span class="user-form-section-icon">
+                        <i data-feather="user"></i>
                     </span>
+
+                    Account Information
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Password"
-                           class="form-label">
-                        Password
-                    </label>
+                <div class="user-form-grid">
 
-                    <input asp-for="Password"
-                           type="password"
-                           class="form-control"
-                           autocomplete="new-password" />
+                    <div class="user-form-group">
+                        <label asp-for="Username"
+                               class="user-form-label">
 
-                    <span asp-validation-for="Password"
-                          class="text-danger">
-                    </span>
+                            Username
+                            <span class="user-required">*</span>
+                        </label>
+
+                        <input asp-for="Username"
+                               class="user-form-control"
+                               placeholder="Enter username" />
+
+                        <span asp-validation-for="Username"
+                              class="user-validation">
+                        </span>
+                    </div>
+
+                    <div class="user-form-group">
+                        <label asp-for="Password"
+                               class="user-form-label">
+
+                            Password
+                            <span class="user-required">*</span>
+                        </label>
+
+                        <input asp-for="Password"
+                               type="password"
+                               class="user-form-control"
+                               placeholder="Enter password" />
+
+                        <span asp-validation-for="Password"
+                              class="user-validation">
+                        </span>
+                    </div>
+
                 </div>
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Email"
-                           class="form-label">
-                        Email
-                    </label>
-
-                    <input asp-for="Email"
-                           type="email"
-                           class="form-control" />
-
-                    <span asp-validation-for="Email"
-                          class="text-danger">
-                    </span>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Phone"
-                           class="form-label">
-                        Phone
-                    </label>
-
-                    <input asp-for="Phone"
-                           class="form-control" />
-
-                    <span asp-validation-for="Phone"
-                          class="text-danger">
-                    </span>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Address"
-                           class="form-label">
-                        Address
-                    </label>
-
-                    <input asp-for="Address"
-                           class="form-control" />
-
-                    <span asp-validation-for="Address"
-                          class="text-danger">
-                    </span>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Role"
-                           class="form-label">
-                        Role
-                    </label>
-
-                    <select asp-for="Role"
-                            class="form-select">
-                        <option value="Student">
-                            Student
-                        </option>
-
-                        <option value="Teacher">
-                            Teacher
-                        </option>
-
-                        <option value="Admin">
-                            Admin
-                        </option>
-                    </select>
-
-                    <span asp-validation-for="Role"
-                          class="text-danger">
-                    </span>
-                </div>
-
             </div>
 
-            <button type="submit"
-                    class="btn btn-primary">
-                Create User
-            </button>
+            <div class="user-form-section">
 
-            <a asp-action="Index"
-               class="btn btn-secondary">
-                Back to List
-            </a>
+                <div class="user-form-section-title">
+                    <span class="user-form-section-icon">
+                        <i data-feather="mail"></i>
+                    </span>
+
+                    Contact Information
+                </div>
+
+                <div class="user-form-grid">
+
+                    <div class="user-form-group">
+                        <label asp-for="Email"
+                               class="user-form-label">
+                            Email
+                        </label>
+
+                        <input asp-for="Email"
+                               type="email"
+                               class="user-form-control"
+                               placeholder="user@example.com" />
+
+                        <span asp-validation-for="Email"
+                              class="user-validation">
+                        </span>
+                    </div>
+
+                    <div class="user-form-group">
+                        <label asp-for="Phone"
+                               class="user-form-label">
+                            Phone
+                        </label>
+
+                        <input asp-for="Phone"
+                               class="user-form-control"
+                               placeholder="Enter phone number" />
+
+                        <span asp-validation-for="Phone"
+                              class="user-validation">
+                        </span>
+                    </div>
+
+                    <div class="user-form-group user-form-group-full">
+                        <label asp-for="Address"
+                               class="user-form-label">
+                            Address
+                        </label>
+
+                        <input asp-for="Address"
+                               class="user-form-control"
+                               placeholder="Enter address" />
+
+                        <span asp-validation-for="Address"
+                              class="user-validation">
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="user-form-section">
+
+                <div class="user-form-section-title">
+                    <span class="user-form-section-icon">
+                        <i data-feather="shield"></i>
+                    </span>
+
+                    Access Permission
+                </div>
+
+                <div class="user-form-grid">
+
+                    <div class="user-form-group user-form-group-full">
+
+                        <label asp-for="Role"
+                               class="user-form-label">
+
+                            Role
+                            <span class="user-required">*</span>
+                        </label>
+
+                        <select asp-for="Role"
+                                class="user-form-control">
+
+                            <option value="">
+                                -- Select Role --
+                            </option>
+
+                            <option value="Student">
+                                Student
+                            </option>
+
+                            <option value="Teacher">
+                                Teacher
+                            </option>
+
+                            <option value="Admin">
+                                Admin
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="Role"
+                              class="user-validation">
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="user-form-actions">
+
+                <button type="submit"
+                        class="user-save-button">
+
+                    <i data-feather="user-plus"></i>
+                    Create User
+                </button>
+
+                <a asp-controller="User"
+                   asp-action="Index"
+                   class="user-back-button">
+
+                    <i data-feather="x"></i>
+                    Cancel
+                </a>
+
+            </div>
 
         </form>
-
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.feather) {
+                feather.replace();
+            }
+        });
+    </script>
 }

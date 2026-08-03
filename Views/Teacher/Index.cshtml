@@ -1,71 +1,244 @@
 ﻿@model IEnumerable<SIMS.DatabaseContext.Entities.Teacher>
 
 @{
-    ViewData["Title"] = "Create Student";
+    ViewData["Title"] = "Teacher Management";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    int teacherCount = Model?.Count() ?? 0;
 }
 
-<h2 class="mt-3">Teacher Management</h2>
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/teacher-pages.css"
+          asp-append-version="true" />
+}
 
-<p>
-    <a asp-action="Create" class="btn btn-success">
-        Add Teacher
-    </a>
-</p>
+<div class="teacher-page">
 
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>Teacher Code</th>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Department</th>
-            <th width="220">Action</th>
-        </tr>
-    </thead>
+    <div class="teacher-page-header">
 
-    <tbody>
+        <div>
+            <h1 class="teacher-page-title">
+                Teacher Management
+            </h1>
 
-        @foreach (var item in Model)
-        {
-            <tr>
+            <p class="teacher-page-description">
+                View, create, update and manage teacher profiles
+            </p>
+        </div>
 
-                <td>@item.TeacherCode</td>
+        <a asp-controller="Teacher"
+           asp-action="Create"
+           class="teacher-add-button">
 
-                <td>@item.FullName</td>
+            <i data-feather="user-plus"></i>
+            Add New Teacher
+        </a>
 
-                <td>@item.Email</td>
+    </div>
 
-                <td>@item.Phone</td>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show teacher-alert"
+             role="alert">
 
-                <td>@item.Department</td>
+            @TempData["Success"]
 
-                <td>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
 
-                    <a asp-action="Edit"
-                       asp-route-id="@item.Id"
-                       class="btn btn-warning btn-sm">
-                        Edit
-                    </a>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show teacher-alert"
+             role="alert">
 
-                    <a asp-action="Details"
-                       asp-route-id="@item.Id"
-                       class="btn btn-info btn-sm">
-                        Details
-                    </a>
+            @TempData["Error"]
 
-                    <a asp-action="Delete"
-                       asp-route-id="@item.Id"
-                       class="btn btn-danger btn-sm">
-                        Delete
-                    </a>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
 
-                </td>
+    <div class="teacher-card">
 
-            </tr>
-        }
+        <div class="teacher-card-header">
 
-    </tbody>
+            <h2 class="teacher-card-title">
+                Teacher List
+            </h2>
 
-</table>
+            <span class="teacher-count-badge">
+                <i data-feather="users"></i>
+
+                @teacherCount teacher@(teacherCount == 1 ? "" : "s")
+            </span>
+
+        </div>
+
+        <div class="teacher-table-wrapper">
+
+            <table class="teacher-table">
+
+                <thead>
+                    <tr>
+                        <th>Teacher</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Department</th>
+                        <th>Created Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            string initials = string.Empty;
+
+                            if (!string.IsNullOrWhiteSpace(item.FullName))
+                            {
+                                var parts = item.FullName.Split(
+                                    ' ',
+                                    StringSplitOptions.RemoveEmptyEntries);
+
+                                initials = parts.Length >= 2
+                                    ? $"{parts[0][0]}{parts[^1][0]}"
+                                    : parts[0][0].ToString();
+
+                                initials = initials.ToUpper();
+                            }
+
+                            <tr>
+
+                                <td>
+                                    <div class="teacher-main-info">
+
+                                        <div class="teacher-avatar">
+                                            @initials
+                                        </div>
+
+                                        <div>
+                                            <div class="teacher-name">
+                                                @item.FullName
+                                            </div>
+
+                                            <div class="teacher-code">
+                                                @item.TeacherCode
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(item.Email)
+                                        ? "-"
+                                        : item.Email)
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(item.Phone)
+                                        ? "-"
+                                        : item.Phone)
+                                </td>
+
+                                <td>
+                                    <span class="teacher-department-badge">
+                                        <i data-feather="briefcase"></i>
+
+                                        @(string.IsNullOrWhiteSpace(item.Department)
+                                            ? "Not assigned"
+                                            : item.Department)
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @item.CreatedDate.ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td>
+                                    <div class="teacher-action-group">
+
+                                        <a asp-controller="Teacher"
+                                           asp-action="Details"
+                                           asp-route-id="@item.Id"
+                                           class="teacher-action teacher-action-details"
+                                           title="View details">
+
+                                            <i data-feather="eye"></i>
+                                        </a>
+
+                                        <a asp-controller="Teacher"
+                                           asp-action="Edit"
+                                           asp-route-id="@item.Id"
+                                           class="teacher-action teacher-action-edit"
+                                           title="Edit teacher">
+
+                                            <i data-feather="edit-2"></i>
+                                        </a>
+
+                                        <a asp-controller="Teacher"
+                                           asp-action="Delete"
+                                           asp-route-id="@item.Id"
+                                           class="teacher-action teacher-action-delete"
+                                           title="Delete teacher">
+
+                                            <i data-feather="trash-2"></i>
+                                        </a>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6"
+                                class="teacher-empty">
+
+                                <div class="teacher-empty-icon">
+                                    <i data-feather="users"></i>
+                                </div>
+
+                                <h3 class="teacher-empty-title">
+                                    No teachers found
+                                </h3>
+
+                                <p class="teacher-empty-text">
+                                    Add a teacher to begin managing teacher profiles.
+                                </p>
+
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.feather) {
+                feather.replace();
+            }
+        });
+    </script>
+}

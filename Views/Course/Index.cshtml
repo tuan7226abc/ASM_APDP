@@ -1,56 +1,225 @@
 ﻿@model IEnumerable<SIMS.DatabaseContext.Entities.Course>
+
 @{
     ViewData["Title"] = "Course List";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    int courseCount = Model?.Count() ?? 0;
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0">Course List</h1>
-    @if (User.IsInRole("Admin"))
-    {
-        <a asp-action="Create" class="btn btn-primary">Add New Course</a>
-    }
-</div>
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/course-pages.css"
+          asp-append-version="true" />
+}
 
-<div class="card">
-    <div class="card-body">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Course Code</th>
-                    <th>Course Name</th>
-                    <th>Credits</th>
-                    <th>Max Students</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
-                {
-                    @foreach (var item in Model)
+<div class="course-page">
+
+    <div class="course-page-header">
+
+        <div>
+            <h1 class="course-page-title">
+                Course Management
+            </h1>
+
+            <p class="course-page-description">
+                View, create, update and manage all courses
+            </p>
+        </div>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-controller="Course"
+               asp-action="Create"
+               class="course-add-button">
+
+                <i data-feather="plus"></i>
+                Add New Course
+            </a>
+        }
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show course-alert">
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show course-alert">
+            @TempData["Error"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    <div class="course-card">
+
+        <div class="course-card-header">
+
+            <h2 class="course-card-title">
+                Course List
+            </h2>
+
+            <span class="course-count-badge">
+                <i data-feather="book-open"></i>
+
+                @courseCount course@(courseCount == 1 ? "" : "s")
+            </span>
+
+        </div>
+
+        <div class="course-table-wrapper">
+
+            <table class="course-table">
+
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Description</th>
+                        <th>Credits</th>
+                        <th>Maximum Students</th>
+                        <th>Created At</th>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <th>Actions</th>
+                        }
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model != null && Model.Any())
                     {
-                        <tr>
-                            <td>@item.CourseCode</td>
-                            <td>@item.CourseName</td>
-                            <td>@item.Credits</td>
-                            <td>@item.MaxStudents</td>
-                            <td>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <div class="course-main-info">
+
+                                        <div class="course-icon">
+                                            <i data-feather="book-open"></i>
+                                        </div>
+
+                                        <div>
+                                            <div class="course-name">
+                                                @item.CourseName
+                                            </div>
+
+                                            <div class="course-code">
+                                                @item.CourseCode
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(item.Description)
+                                        ? "-"
+                                        : item.Description)
+                                </td>
+
+                                <td>
+                                    <span class="course-credit-badge">
+                                        @item.Credits
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="course-capacity">
+                                        <i data-feather="users"></i>
+                                        @item.MaxStudents
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @(item.CreatedAt.HasValue
+                                        ? item.CreatedAt.Value.ToString("dd/MM/yyyy")
+                                        : "-")
+                                </td>
+
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                                    <td>
+                                        <div class="course-action-group">
+
+                                            <a asp-controller="Course"
+                                               asp-action="Edit"
+                                               asp-route-id="@item.Id"
+                                               class="course-action course-action-edit"
+                                               title="Edit course">
+
+                                                <i data-feather="edit-2"></i>
+                                            </a>
+
+                                            <a asp-controller="Course"
+                                               asp-action="Delete"
+                                               asp-route-id="@item.Id"
+                                               class="course-action course-action-delete"
+                                               title="Delete course">
+
+                                                <i data-feather="trash-2"></i>
+                                            </a>
+
+                                        </div>
+                                    </td>
                                 }
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6"
+                                class="course-empty">
+
+                                <div class="course-empty-icon">
+                                    <i data-feather="book-open"></i>
+                                </div>
+
+                                <h3 class="course-empty-title">
+                                    No courses found
+                                </h3>
+
+                                <p class="course-empty-text">
+                                    Add a course to begin managing course information.
+                                </p>
+
                             </td>
                         </tr>
                     }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="5" class="text-center">No courses found.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
+
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.feather) {
+                feather.replace();
+            }
+        });
+    </script>
+}

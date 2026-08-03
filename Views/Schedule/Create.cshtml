@@ -5,162 +5,319 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<div class="mb-4">
-    <h1 class="h3 mb-1">Add Schedule</h1>
-    <p class="text-muted">Create a new timetable entry</p>
-</div>
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/schedule-pages.css"
+          asp-append-version="true" />
+}
 
-<div class="card">
-    <div class="card-body">
+<div class="schedule-page">
 
-        <form asp-action="Create" method="post">
+    <!-- PAGE HEADER -->
+    <div class="schedule-page-header">
+
+        <div>
+            <h1 class="schedule-page-title">
+                Add Schedule
+            </h1>
+
+            <p class="schedule-page-description">
+                Create a new timetable entry for a course and teacher
+            </p>
+        </div>
+
+        <a asp-controller="Schedule"
+           asp-action="Index"
+           class="schedule-back-button">
+
+            <i data-feather="arrow-left"></i>
+            Back to Schedule List
+        </a>
+
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="schedule-form-card">
+
+        <form asp-controller="Schedule"
+              asp-action="Create"
+              method="post">
+
+            @Html.AntiForgeryToken()
 
             <div asp-validation-summary="ModelOnly"
-                 class="alert alert-danger">
+                 class="alert alert-danger schedule-alert">
             </div>
 
-            <div class="row">
+            <!-- COURSE AND TEACHER -->
+            <div class="schedule-form-section">
 
-                <div class="col-md-6 mb-3">
-                    <label asp-for="CourseId"
-                           class="form-label">
-                        Course
-                    </label>
+                <div class="schedule-form-section-title">
 
-                    <select asp-for="CourseId"
-                            asp-items="ViewBag.CourseId"
-                            class="form-select">
-                        <option value="">-- Select Course --</option>
-                    </select>
-
-                    <span asp-validation-for="CourseId"
-                          class="text-danger">
+                    <span class="schedule-form-section-icon">
+                        <i data-feather="book-open"></i>
                     </span>
+
+                    Course Assignment
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <label asp-for="TeacherId"
-                           class="form-label">
-                        Teacher
-                    </label>
+                <div class="schedule-form-grid">
 
-                    <select asp-for="TeacherId"
-                            asp-items="ViewBag.TeacherId"
-                            class="form-select">
-                        <option value="">-- Select Teacher --</option>
-                    </select>
+                    <!-- COURSE -->
+                    <div class="schedule-form-group">
 
-                    <span asp-validation-for="TeacherId"
-                          class="text-danger">
-                    </span>
-                </div>
+                        <label asp-for="CourseId"
+                               class="schedule-form-label">
 
-                <div class="col-md-6 mb-3">
-                    <label asp-for="DayOfWeek"
-                           class="form-label">
-                        Day of Week
-                    </label>
+                            Course
+                            <span class="schedule-required">*</span>
+                        </label>
 
-                    <select asp-for="DayOfWeek"
-                            class="form-select">
-                        <option value="2">Monday</option>
-                        <option value="3">Tuesday</option>
-                        <option value="4">Wednesday</option>
-                        <option value="5">Thursday</option>
-                        <option value="6">Friday</option>
-                        <option value="7">Saturday</option>
-                        <option value="8">Sunday</option>
-                    </select>
+                        <select asp-for="CourseId"
+                                asp-items="ViewBag.CourseId"
+                                class="schedule-form-control">
 
-                    <span asp-validation-for="DayOfWeek"
-                          class="text-danger">
-                    </span>
-                </div>
+                            <option value="">
+                                -- Select Course --
+                            </option>
+                        </select>
 
-                <div class="col-md-3 mb-3">
-                    <label asp-for="StartTime"
-                           class="form-label">
-                        Start Time
-                    </label>
+                        <span asp-validation-for="CourseId"
+                              class="schedule-validation">
+                        </span>
 
-                    <input asp-for="StartTime"
-                           type="time"
-                           class="form-control" />
+                    </div>
 
-                    <span asp-validation-for="StartTime"
-                          class="text-danger">
-                    </span>
-                </div>
+                    <!-- TEACHER -->
+                    <div class="schedule-form-group">
 
-                <div class="col-md-3 mb-3">
-                    <label asp-for="EndTime"
-                           class="form-label">
-                        End Time
-                    </label>
+                        <label asp-for="TeacherId"
+                               class="schedule-form-label">
 
-                    <input asp-for="EndTime"
-                           type="time"
-                           class="form-control" />
+                            Teacher
+                            <span class="schedule-required">*</span>
+                        </label>
 
-                    <span asp-validation-for="EndTime"
-                          class="text-danger">
-                    </span>
-                </div>
+                        <select asp-for="TeacherId"
+                                asp-items="ViewBag.TeacherId"
+                                class="schedule-form-control">
 
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Room"
-                           class="form-label">
-                        Room
-                    </label>
+                            <option value="">
+                                -- Select Teacher --
+                            </option>
+                        </select>
 
-                    <input asp-for="Room"
-                           class="form-control"
-                           placeholder="Example: A101" />
+                        <span asp-validation-for="TeacherId"
+                              class="schedule-validation">
+                        </span>
 
-                    <span asp-validation-for="Room"
-                          class="text-danger">
-                    </span>
-                </div>
+                    </div>
 
-                <div class="col-md-3 mb-3">
-                    <label asp-for="StartDate"
-                           class="form-label">
-                        Start Date
-                    </label>
-
-                    <input asp-for="StartDate"
-                           type="date"
-                           class="form-control" />
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <label asp-for="EndDate"
-                           class="form-label">
-                        End Date
-                    </label>
-
-                    <input asp-for="EndDate"
-                           type="date"
-                           class="form-control" />
                 </div>
 
             </div>
 
-            <button type="submit"
-                    class="btn btn-primary">
-                Save
-            </button>
+            <!-- TIME INFORMATION -->
+            <div class="schedule-form-section">
 
-            <a asp-action="Index"
-               class="btn btn-secondary">
-                Back to List
-            </a>
+                <div class="schedule-form-section-title">
+
+                    <span class="schedule-form-section-icon">
+                        <i data-feather="clock"></i>
+                    </span>
+
+                    Time Information
+                </div>
+
+                <div class="schedule-form-grid schedule-form-grid-three">
+
+                    <!-- DAY OF WEEK -->
+                    <div class="schedule-form-group">
+
+                        <label asp-for="DayOfWeek"
+                               class="schedule-form-label">
+
+                            Day of Week
+                            <span class="schedule-required">*</span>
+                        </label>
+
+                        <select asp-for="DayOfWeek"
+                                class="schedule-form-control">
+
+                            <option value="0">
+                                -- Select Day --
+                            </option>
+
+                            <option value="1">Monday</option>
+                            <option value="2">Tuesday</option>
+                            <option value="3">Wednesday</option>
+                            <option value="4">Thursday</option>
+                            <option value="5">Friday</option>
+                            <option value="6">Saturday</option>
+                            <option value="7">Sunday</option>
+
+                        </select>
+
+                        <span asp-validation-for="DayOfWeek"
+                              class="schedule-validation">
+                        </span>
+
+                    </div>
+
+                    <!-- START TIME -->
+                    <div class="schedule-form-group">
+
+                        <label asp-for="StartTime"
+                               class="schedule-form-label">
+
+                            Start Time
+                            <span class="schedule-required">*</span>
+                        </label>
+
+                        <input asp-for="StartTime"
+                               type="time"
+                               class="schedule-form-control" />
+
+                        <span asp-validation-for="StartTime"
+                              class="schedule-validation">
+                        </span>
+
+                    </div>
+
+                    <!-- END TIME -->
+                    <div class="schedule-form-group">
+
+                        <label asp-for="EndTime"
+                               class="schedule-form-label">
+
+                            End Time
+                            <span class="schedule-required">*</span>
+                        </label>
+
+                        <input asp-for="EndTime"
+                               type="time"
+                               class="schedule-form-control" />
+
+                        <span asp-validation-for="EndTime"
+                              class="schedule-validation">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- LOCATION AND DATE RANGE -->
+            <div class="schedule-form-section">
+
+                <div class="schedule-form-section-title">
+
+                    <span class="schedule-form-section-icon">
+                        <i data-feather="map-pin"></i>
+                    </span>
+
+                    Location and Date Range
+                </div>
+
+                <div class="schedule-form-grid schedule-form-grid-three">
+
+                    <!-- ROOM -->
+                    <div class="schedule-form-group">
+
+                        <label asp-for="Room"
+                               class="schedule-form-label">
+                            Room
+                        </label>
+
+                        <input asp-for="Room"
+                               class="schedule-form-control"
+                               placeholder="Example: A101" />
+
+                        <span asp-validation-for="Room"
+                              class="schedule-validation">
+                        </span>
+
+                    </div>
+
+                    <!-- START DATE -->
+                    <div class="schedule-form-group">
+
+                        <label asp-for="StartDate"
+                               class="schedule-form-label">
+
+                            Start Date
+                            <span class="schedule-required">*</span>
+                        </label>
+
+                        <input asp-for="StartDate"
+                               type="date"
+                               class="schedule-form-control" />
+
+                        <span asp-validation-for="StartDate"
+                              class="schedule-validation">
+                        </span>
+
+                    </div>
+
+                    <!-- END DATE -->
+                    <div class="schedule-form-group">
+
+                        <label asp-for="EndDate"
+                               class="schedule-form-label">
+
+                            End Date
+                            <span class="schedule-required">*</span>
+                        </label>
+
+                        <input asp-for="EndDate"
+                               type="date"
+                               class="schedule-form-control" />
+
+                        <span asp-validation-for="EndDate"
+                              class="schedule-validation">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="schedule-form-actions">
+
+                <button type="submit"
+                        class="schedule-save-button">
+
+                    <i data-feather="save"></i>
+                    Save Schedule
+                </button>
+
+                <a asp-controller="Schedule"
+                   asp-action="Index"
+                   class="schedule-back-button">
+
+                    <i data-feather="x"></i>
+                    Cancel
+                </a>
+
+            </div>
 
         </form>
 
     </div>
+
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.feather) {
+                feather.replace();
+            }
+        });
+    </script>
 }

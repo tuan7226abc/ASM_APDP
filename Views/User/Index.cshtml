@@ -3,190 +3,267 @@
 @{
     ViewData["Title"] = "User Management";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    int userCount = Model?.Count() ?? 0;
+    string keyword = Context.Request.Query["keyword"].ToString();
 }
 
-<div class="mb-4">
-    <h1 class="h3 mb-1">User Management</h1>
-    <p class="text-muted">
-        Manage system accounts and roles
-    </p>
-</div>
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/user-pages.css"
+          asp-append-version="true" />
+}
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show">
-        @TempData["Success"]
+<div class="user-page">
 
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert">
-        </button>
+    <div class="user-page-header">
+        <div>
+            <h1 class="user-page-title">User Management</h1>
+
+            <p class="user-page-description">
+                Manage system accounts, roles and account status
+            </p>
+        </div>
+
+        <a asp-controller="User"
+           asp-action="Create"
+           class="user-add-button">
+
+            <i data-feather="user-plus"></i>
+            Add New User
+        </a>
     </div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show">
-        @TempData["Error"]
 
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert">
-        </button>
-    </div>
-}
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show user-alert">
+            @TempData["Success"]
 
-<div class="card">
-    <div class="card-body">
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <a asp-action="Create" class="btn btn-primary">
-                Add User
-            </a>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show user-alert">
+            @TempData["Error"]
 
-            <form asp-action="Index"
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    <div class="user-card">
+
+        <div class="user-card-header">
+            <h2 class="user-card-title">System Accounts</h2>
+
+            <span class="user-count-badge">
+                <i data-feather="users"></i>
+                @userCount account@(userCount == 1 ? "" : "s")
+            </span>
+        </div>
+
+        <div class="user-toolbar">
+
+            <div class="text-muted">
+                Search and manage registered accounts
+            </div>
+
+            <form asp-controller="User"
+                  asp-action="Index"
                   method="get"
-                  class="d-flex">
+                  class="user-search-form">
 
                 <input type="text"
-                       name="search"
-                       value="@ViewBag.Search"
-                       class="form-control me-2"
-                       placeholder="Search username, email or role" />
+                       name="keyword"
+                       value="@keyword"
+                       class="user-search-input"
+                       placeholder="Search username, email or role..." />
 
-                <button type="submit" class="btn btn-secondary">
+                <button type="submit"
+                        class="user-search-button">
                     Search
                 </button>
 
-                <a asp-action="Index"
-                   class="btn btn-outline-secondary ms-2">
+                <a asp-controller="User"
+                   asp-action="Index"
+                   class="user-clear-button">
                     Clear
                 </a>
             </form>
+
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
+        <div class="user-table-wrapper">
 
-                <thead class="table-dark">
+            <table class="user-table">
+
+                <thead>
                     <tr>
-                        <th>Username</th>
-                        <th>Email</th>
+                        <th>User</th>
                         <th>Phone</th>
                         <th>Role</th>
                         <th>Status</th>
                         <th>Created Date</th>
-                        <th style="width: 300px;">Actions</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @if (!Model.Any())
-                    {
-                        <tr>
-                            <td colspan="7"
-                                class="text-center text-muted">
-                                No users found.
-                            </td>
-                        </tr>
-                    }
-                    else
+
+                    @if (Model != null && Model.Any())
                     {
                         @foreach (var item in Model)
                         {
+                            string initial = string.IsNullOrWhiteSpace(item.Username)
+                                ? "U"
+                                : item.Username.Substring(0, 1).ToUpper();
+
+                            string roleClass = item.Role?.ToLower() switch
+                            {
+                                "admin" => "user-role-admin",
+                                "teacher" => "user-role-teacher",
+                                _ => "user-role-student"
+                            };
+
+                            bool isActive =
+                                item.Status == 1;
+
                             <tr>
-                                <td>@item.Username</td>
-
-                                <td>@item.Email</td>
-
-                                <td>@item.Phone</td>
 
                                 <td>
-                                    @if (item.Role == "Admin")
-                                    {
-                                        <span class="badge bg-danger">
-                                            Admin
-                                        </span>
-                                    }
-                                    else if (item.Role == "Teacher")
-                                    {
-                                        <span class="badge bg-primary">
-                                            Teacher
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-success">
-                                            Student
-                                        </span>
-                                    }
+                                    <div class="user-main-info">
+
+                                        <div class="user-avatar">
+                                            @initial
+                                        </div>
+
+                                        <div>
+                                            <div class="user-name">
+                                                @item.Username
+                                            </div>
+
+                                            <div class="user-email-small">
+                                                @(string.IsNullOrWhiteSpace(item.Email)
+                                                    ? "-"
+                                                    : item.Email)
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </td>
 
                                 <td>
-                                    @if (item.Status == 1)
-                                    {
-                                        <span class="badge bg-success">
-                                            Active
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-secondary">
-                                            Locked
-                                        </span>
-                                    }
+                                    @(string.IsNullOrWhiteSpace(item.Phone)
+                                        ? "-"
+                                        : item.Phone)
                                 </td>
 
                                 <td>
-                                    @(item.CreatedAt?.ToString("dd/MM/yyyy")
-                                        ?? "")
+                                    <span class="user-role @roleClass">
+                                        @item.Role
+                                    </span>
                                 </td>
 
                                 <td>
-                                    <a asp-action="Edit"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-warning btn-sm">
-                                        Edit
-                                    </a>
+                                    <span class="user-status @(isActive
+                                                                                ? "user-status-active"
+                                                                                : "user-status-locked")">
 
-                                    <form asp-action="ToggleStatus"
-                                          asp-route-id="@item.Id"
-                                          method="post"
-                                          class="d-inline">
+                                        @(isActive ? "Active" : "Locked")
+                                    </span>
+                                </td>
 
-                                        @Html.AntiForgeryToken()
+                                <td>
+                                    @(item.CreatedAt.HasValue
+    ? item.CreatedAt.Value.ToString("dd/MM/yyyy")
+    : "-")
+                                </td>
 
-                                        @if (item.Status == 1)
-                                        {
+                                <td>
+                                    <div class="user-action-group">
+
+                                        <a asp-controller="User"
+                                           asp-action="Edit"
+                                           asp-route-id="@item.Id"
+                                           class="user-action user-action-edit">
+
+                                            <i data-feather="edit-2"></i>
+                                            Edit
+                                        </a>
+
+                                        <form asp-controller="User"
+                                              asp-action="ToggleLock"
+                                              asp-route-id="@item.Id"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
                                             <button type="submit"
-                                                    class="btn btn-secondary btn-sm"
-                                                    onclick="return confirm('Lock this account?')">
-                                                Lock
+                                                    class="user-action user-action-lock">
+
+                                                <i data-feather="lock"></i>
+
+                                                @(isActive ? "Lock" : "Unlock")
                                             </button>
-                                        }
-                                        else
-                                        {
-                                            <button type="submit"
-                                                    class="btn btn-success btn-sm"
-                                                    onclick="return confirm('Unlock this account?')">
-                                                Unlock
-                                            </button>
-                                        }
-                                    </form>
+                                        </form>
 
-                                    <a asp-action="ResetPassword"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-info btn-sm">
-                                        Reset Password
-                                    </a>
+                                        <a asp-controller="User"
+                                           asp-action="ResetPassword"
+                                           asp-route-id="@item.Id"
+                                           class="user-action user-action-reset">
 
+                                            <i data-feather="key"></i>
+                                            Reset Password
+                                        </a>
 
+                                    </div>
                                 </td>
+
                             </tr>
                         }
                     }
-                </tbody>
+                    else
+                    {
+                        <tr>
+                            <td colspan="6"
+                                class="user-empty">
 
+                                <div class="user-empty-icon">
+                                    <i data-feather="users"></i>
+                                </div>
+
+                                <h3 class="user-empty-title">
+                                    No users found
+                                </h3>
+
+                                <p class="user-empty-text">
+                                    Create a user account to begin managing system access.
+                                </p>
+
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
             </table>
         </div>
     </div>
-</div>  
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.feather) {
+                feather.replace();
+            }
+        });
+    </script>
+}

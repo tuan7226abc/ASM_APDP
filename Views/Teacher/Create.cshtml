@@ -1,45 +1,228 @@
 ﻿@model SIMS.DatabaseContext.Entities.Teacher
 
 @{
-    ViewData["Title"] = "Create Student";
+    ViewData["Title"] = "Create Teacher";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
-<h2>Add Teacher</h2>
 
-<form asp-action="Create">
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/teacher-pages.css"
+          asp-append-version="true" />
+}
 
-    <div class="mb-3">
-        <label>Teacher Code</label>
-        <input asp-for="TeacherCode" class="form-control" />
+<div class="teacher-page">
+
+    <div class="teacher-page-header">
+
+        <div>
+            <h1 class="teacher-page-title">
+                Create Teacher
+            </h1>
+
+            <p class="teacher-page-description">
+                Add a new teacher profile to the system
+            </p>
+        </div>
+
+        <a asp-controller="Teacher"
+           asp-action="Index"
+           class="teacher-back-button">
+
+            <i data-feather="arrow-left"></i>
+            Back to Teacher List
+        </a>
+
     </div>
 
-    <div class="mb-3">
-        <label>Full Name</label>
-        <input asp-for="FullName" class="form-control" />
+    <div class="teacher-form-card">
+
+        <form asp-controller="Teacher"
+              asp-action="Create"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger teacher-alert">
+            </div>
+
+            <div class="teacher-form-section">
+
+                <div class="teacher-form-section-title">
+
+                    <span class="teacher-form-section-icon">
+                        <i data-feather="user"></i>
+                    </span>
+
+                    Basic Information
+                </div>
+
+                <div class="teacher-form-grid">
+
+                    <div class="teacher-form-group">
+
+                        <label asp-for="TeacherCode"
+                               class="teacher-form-label">
+
+                            Teacher Code
+                            <span class="teacher-required">*</span>
+                        </label>
+
+                        <input asp-for="TeacherCode"
+                               class="teacher-form-control"
+                               placeholder="Example: GV001" />
+
+                        <span asp-validation-for="TeacherCode"
+                              class="teacher-validation">
+                        </span>
+
+                    </div>
+
+                    <div class="teacher-form-group">
+
+                        <label asp-for="FullName"
+                               class="teacher-form-label">
+
+                            Full Name
+                            <span class="teacher-required">*</span>
+                        </label>
+
+                        <input asp-for="FullName"
+                               class="teacher-form-control"
+                               placeholder="Enter teacher's full name" />
+
+                        <span asp-validation-for="FullName"
+                              class="teacher-validation">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="teacher-form-section">
+
+                <div class="teacher-form-section-title">
+
+                    <span class="teacher-form-section-icon">
+                        <i data-feather="mail"></i>
+                    </span>
+
+                    Contact Information
+                </div>
+
+                <div class="teacher-form-grid">
+
+                    <div class="teacher-form-group">
+
+                        <label asp-for="Email"
+                               class="teacher-form-label">
+
+                            Email
+                            <span class="teacher-required">*</span>
+                        </label>
+
+                        <input asp-for="Email"
+                               type="email"
+                               class="teacher-form-control"
+                               placeholder="teacher@example.com" />
+
+                        <span asp-validation-for="Email"
+                              class="teacher-validation">
+                        </span>
+
+                    </div>
+
+                    <div class="teacher-form-group">
+
+                        <label asp-for="Phone"
+                               class="teacher-form-label">
+                            Phone
+                        </label>
+
+                        <input asp-for="Phone"
+                               class="teacher-form-control"
+                               placeholder="Enter phone number" />
+
+                        <span asp-validation-for="Phone"
+                              class="teacher-validation">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="teacher-form-section">
+
+                <div class="teacher-form-section-title">
+
+                    <span class="teacher-form-section-icon">
+                        <i data-feather="briefcase"></i>
+                    </span>
+
+                    Work Information
+                </div>
+
+                <div class="teacher-form-grid">
+
+                    <div class="teacher-form-group teacher-form-group-full">
+
+                        <label asp-for="Department"
+                               class="teacher-form-label">
+                            Department
+                        </label>
+
+                        <input asp-for="Department"
+                               class="teacher-form-control"
+                               placeholder="Example: Information Technology" />
+
+                        <span asp-validation-for="Department"
+                              class="teacher-validation">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="teacher-form-actions">
+
+                <button type="submit"
+                        class="teacher-save-button">
+
+                    <i data-feather="save"></i>
+                    Save Teacher
+                </button>
+
+                <a asp-controller="Teacher"
+                   asp-action="Index"
+                   class="teacher-back-button">
+
+                    <i data-feather="x"></i>
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
     </div>
 
-    <div class="mb-3">
-        <label>Email</label>
-        <input asp-for="Email" class="form-control" />
-    </div>
+</div>
 
-    <div class="mb-3">
-        <label>Phone</label>
-        <input asp-for="Phone" class="form-control" />
-    </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 
-    <div class="mb-3">
-        <label>Department</label>
-        <input asp-for="Department" class="form-control" />
-    </div>
-
-    <button class="btn btn-success">
-        Save
-    </button>
-
-    <a asp-action="Index"
-       class="btn btn-secondary">
-        Back
-    </a>
-
-</form>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.feather) {
+                feather.replace();
+            }
+        });
+    </script>
+}

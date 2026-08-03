@@ -3,39 +3,85 @@
 @{
     ViewData["Title"] = "Schedule Management";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    int scheduleCount = Model?.Count() ?? 0;
 }
 
-<div class="mb-4">
-    <h1 class="h3 mb-1">Schedule Management</h1>
-    <p class="text-muted">Manage course timetables</p>
-</div>
-
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show">
-        @TempData["Success"]
-
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert">
-        </button>
-    </div>
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/schedule-pages.css"
+          asp-append-version="true" />
 }
 
-<div class="card">
-    <div class="card-body">
+<div class="schedule-page">
 
-        <div class="mb-3">
-            <a asp-action="Create"
-               class="btn btn-primary">
-                Add Schedule
-            </a>
+    <div class="schedule-page-header">
+
+        <div>
+            <h1 class="schedule-page-title">
+                Schedule Management
+            </h1>
+
+            <p class="schedule-page-description">
+                Manage course timetables, classrooms and teaching periods
+            </p>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
+        <a asp-controller="Schedule"
+           asp-action="Create"
+           class="schedule-add-button">
 
-                <thead class="table-dark">
+            <i data-feather="calendar"></i>
+            Add New Schedule
+        </a>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show schedule-alert">
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show schedule-alert">
+            @TempData["Error"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    <div class="schedule-card">
+
+        <div class="schedule-card-header">
+
+            <h2 class="schedule-card-title">
+                Timetable List
+            </h2>
+
+            <span class="schedule-count-badge">
+                <i data-feather="calendar"></i>
+
+                @scheduleCount schedule@(scheduleCount == 1 ? "" : "s")
+            </span>
+
+        </div>
+
+        <div class="schedule-table-wrapper">
+
+            <table class="schedule-table">
+
+                <thead>
                     <tr>
                         <th>Course</th>
                         <th>Teacher</th>
@@ -44,82 +90,141 @@
                         <th>Room</th>
                         <th>Start Date</th>
                         <th>End Date</th>
-                        <th style="width: 160px;">Actions</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @if (!Model.Any())
-                    {
-                        <tr>
-                            <td colspan="8"
-                                class="text-center text-muted">
-                                No schedules found.
-                            </td>
-                        </tr>
-                    }
-                    else
+
+                    @if (Model != null && Model.Any())
                     {
                         @foreach (var item in Model)
                         {
-                            string dayName = item.DayOfWeek switch
-                            {
-                                2 => "Monday",
-                                3 => "Tuesday",
-                                4 => "Wednesday",
-                                5 => "Thursday",
-                                6 => "Friday",
-                                7 => "Saturday",
-                                8 => "Sunday",
-                                _ => "Unknown"
-                            };
-
                             <tr>
+
                                 <td>
-                                    @(item.Course?.CourseName ?? "N/A")
+                                    <div class="schedule-course-info">
+
+                                        <div class="schedule-course-icon">
+                                            <i data-feather="book-open"></i>
+                                        </div>
+
+                                        <div>
+                                            <div class="schedule-course-name">
+                                                @(item.Course?.CourseName ?? "Unknown course")
+                                            </div>
+
+                                            <div class="schedule-course-code">
+                                                @(item.Course?.CourseCode ?? "-")
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </td>
 
                                 <td>
-                                    @(item.Teacher?.FullName ?? "N/A")
-                                </td>
-
-                                <td>@dayName</td>
-
-                                <td>
-                                    @item.StartTime.ToString(@"hh\:mm")
-                                    -
-                                    @item.EndTime.ToString(@"hh\:mm")
-                                </td>
-
-                                <td>@item.Room</td>
-
-                                <td>
-                                    @(item.StartDate?.ToString("dd/MM/yyyy") ?? "-")
+                                    @(item.Teacher?.FullName ?? "Not assigned")
                                 </td>
 
                                 <td>
-                                    @(item.EndDate?.ToString("dd/MM/yyyy") ?? "-")
+                                    <span class="schedule-day-badge">
+                                        @item.DayOfWeek
+                                    </span>
                                 </td>
 
                                 <td>
-                                    <a asp-action="Edit"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-warning btn-sm">
-                                        Edit
-                                    </a>
+                                    <span class="schedule-time">
+                                        <i data-feather="clock"></i>
 
-                                    <a asp-action="Delete"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-danger btn-sm">
-                                        Delete
-                                    </a>
+                                        @item.StartTime.ToString(@"hh\:mm")
+                                        -
+                                        @item.EndTime.ToString(@"hh\:mm")
+                                    </span>
                                 </td>
+
+                                <td>
+                                    <span class="schedule-room">
+                                        <i data-feather="map-pin"></i>
+
+                                        @(string.IsNullOrWhiteSpace(item.Room)
+                                            ? "-"
+                                            : item.Room)
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @item.StartDate
+                                </td>
+
+                                <td>
+                                    @item.EndDate
+                                </td>
+
+                                <td>
+                                    <div class="schedule-action-group">
+
+                                        <a asp-controller="Schedule"
+                                           asp-action="Edit"
+                                           asp-route-id="@item.Id"
+                                           class="schedule-action schedule-action-edit"
+                                           title="Edit schedule">
+
+                                            <i data-feather="edit-2"></i>
+                                        </a>
+
+                                        <a asp-controller="Schedule"
+                                           asp-action="Delete"
+                                           asp-route-id="@item.Id"
+                                           class="schedule-action schedule-action-delete"
+                                           title="Delete schedule">
+
+                                            <i data-feather="trash-2"></i>
+                                        </a>
+
+                                    </div>
+                                </td>
+
                             </tr>
                         }
                     }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8"
+                                class="schedule-empty">
+
+                                <div class="schedule-empty-icon">
+                                    <i data-feather="calendar"></i>
+                                </div>
+
+                                <h3 class="schedule-empty-title">
+                                    No schedules found
+                                </h3>
+
+                                <p class="schedule-empty-text">
+                                    Add a new timetable entry to begin managing schedules.
+                                </p>
+
+                            </td>
+                        </tr>
+                    }
+
                 </tbody>
 
             </table>
+
         </div>
+
     </div>
+
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.feather) {
+                feather.replace();
+            }
+        });
+    </script>
+}

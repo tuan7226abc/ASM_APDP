@@ -4,14 +4,25 @@ namespace SIMS.Models
 {
     public class TeacherDashboardViewModel
     {
-        public string TeacherName { get; set; } = string.Empty;
+        public bool HasTeacherProfile { get; set; }
 
-        public int TotalCourses { get; set; }
+        public int TeacherId { get; set; }
 
-        public int TotalStudents { get; set; }
+        public string TeacherName { get; set; }
+            = string.Empty;
 
-        public int TodayClasses { get; set; }
+        public string TeacherCode { get; set; }
+            = string.Empty;
 
-        public List<Schedule> TodaySchedules { get; set; } = new();
+        public int CourseCount { get; set; }
+
+        public int StudentCount { get; set; }
+
+        public int TodayClassCount { get; set; }
+
+        public int AssignmentCount { get; set; }
+
+        public List<Schedule> TodaySchedules { get; set; }
+            = new();
     }
 }

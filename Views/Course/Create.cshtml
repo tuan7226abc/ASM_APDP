@@ -1,44 +1,213 @@
 ﻿@model SIMS.DatabaseContext.Entities.Course
+
 @{
     ViewData["Title"] = "Create Course";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<div class="card">
-    <div class="card-body">
-        <h1 class="h3 mb-3">Create Course</h1>
-        <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/course-pages.css"
+          asp-append-version="true" />
+}
 
-            <div class="mb-3">
-                <label class="form-label">Course Code *</label>
-                <input asp-for="CourseCode" class="form-control" required />
-                <span asp-validation-for="CourseCode" class="text-danger"></span>
-            </div>
+<div class="course-page">
 
-            <div class="mb-3">
-                <label class="form-label">Course Name *</label>
-                <input asp-for="CourseName" class="form-control" required />
-                <span asp-validation-for="CourseName" class="text-danger"></span>
-            </div>
+    <div class="course-page-header">
 
-            <div class="mb-3">
-                <label class="form-label">Credits</label>
-                <input asp-for="Credits" type="number" class="form-control" />
-            </div>
+        <div>
+            <h1 class="course-page-title">
+                Create Course
+            </h1>
 
-            <div class="mb-3">
-                <label class="form-label">Max Students</label>
-                <input asp-for="MaxStudents" type="number" class="form-control" />
-            </div>
+            <p class="course-page-description">
+                Add a new course to the Student Information Management System
+            </p>
+        </div>
 
-            <div class="mb-3">
-                <label class="form-label">Description</label>
-                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
-            </div>
+        <a asp-controller="Course"
+           asp-action="Index"
+           class="course-back-button">
 
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-        </form>
+            <i data-feather="arrow-left"></i>
+            Back to Course List
+        </a>
+
     </div>
+
+    <div class="course-form-card">
+
+        <form asp-controller="Course"
+              asp-action="Create"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger course-alert">
+            </div>
+
+            <div class="course-form-section">
+
+                <div class="course-form-section-title">
+
+                    <span class="course-form-section-icon">
+                        <i data-feather="book-open"></i>
+                    </span>
+
+                    Basic Course Information
+                </div>
+
+                <div class="course-form-grid">
+
+                    <div class="course-form-group">
+
+                        <label asp-for="CourseCode"
+                               class="course-form-label">
+
+                            Course Code
+                            <span class="course-required">*</span>
+                        </label>
+
+                        <input asp-for="CourseCode"
+                               class="course-form-control"
+                               placeholder="Example: SE08101" />
+
+                        <span asp-validation-for="CourseCode"
+                              class="course-validation">
+                        </span>
+
+                    </div>
+
+                    <div class="course-form-group">
+
+                        <label asp-for="CourseName"
+                               class="course-form-label">
+
+                            Course Name
+                            <span class="course-required">*</span>
+                        </label>
+
+                        <input asp-for="CourseName"
+                               class="course-form-control"
+                               placeholder="Enter course name" />
+
+                        <span asp-validation-for="CourseName"
+                              class="course-validation">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="course-form-section">
+
+                <div class="course-form-section-title">
+
+                    <span class="course-form-section-icon">
+                        <i data-feather="settings"></i>
+                    </span>
+
+                    Course Settings
+                </div>
+
+                <div class="course-form-grid">
+
+                    <div class="course-form-group">
+
+                        <label asp-for="Credits"
+                               class="course-form-label">
+                            Credits
+                        </label>
+
+                        <input asp-for="Credits"
+                               type="number"
+                               min="1"
+                               max="20"
+                               class="course-form-control"
+                               placeholder="Example: 3" />
+
+                        <span asp-validation-for="Credits"
+                              class="course-validation">
+                        </span>
+
+                    </div>
+
+                    <div class="course-form-group">
+
+                        <label asp-for="MaxStudents"
+                               class="course-form-label">
+                            Maximum Students
+                        </label>
+
+                        <input asp-for="MaxStudents"
+                               type="number"
+                               min="1"
+                               class="course-form-control"
+                               placeholder="Example: 40" />
+
+                        <span asp-validation-for="MaxStudents"
+                              class="course-validation">
+                        </span>
+
+                    </div>
+
+                    <div class="course-form-group course-form-group-full">
+
+                        <label asp-for="Description"
+                               class="course-form-label">
+                            Description
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  class="course-form-control"
+                                  placeholder="Enter a description of the course"></textarea>
+
+                        <span asp-validation-for="Description"
+                              class="course-validation">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="course-form-actions">
+
+                <button type="submit"
+                        class="course-save-button">
+
+                    <i data-feather="save"></i>
+                    Save Course
+                </button>
+
+                <a asp-controller="Course"
+                   asp-action="Index"
+                   class="course-back-button">
+
+                    <i data-feather="x"></i>
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.feather) {
+                feather.replace();
+            }
+        });
+    </script>
+}
