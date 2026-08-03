@@ -1,0 +1,151 @@
+﻿@model SIMS.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Admin Dashboard</h1>
+    <p class="text-muted">
+        Overview of the Student Information Management System
+    </p>
+</div>
+
+<div class="row">
+
+    <!-- Students -->
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col mt-0">
+                        <h5 class="card-title">
+                            Students
+                        </h5>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="stat text-primary">
+                            <i class="align-middle"
+                               data-feather="user"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="mt-1 mb-3">
+                    @Model.TotalStudents
+                </h1>
+
+                <a asp-controller="Student"
+                   asp-action="Index"
+                   class="text-decoration-none">
+                    View students
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Teachers -->
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col mt-0">
+                        <h5 class="card-title">
+                            Teachers
+                        </h5>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="stat text-primary">
+                            <i class="align-middle"
+                               data-feather="users"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="mt-1 mb-3">
+                    @Model.TotalTeachers
+                </h1>
+
+                <a asp-controller="Teacher"
+                   asp-action="Index"
+                   class="text-decoration-none">
+                    View teachers
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Courses -->
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col mt-0">
+                        <h5 class="card-title">
+                            Courses
+                        </h5>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="stat text-primary">
+                            <i class="align-middle"
+                               data-feather="book-open"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="mt-1 mb-3">
+                    @Model.TotalCourses
+                </h1>
+
+                <a asp-controller="Course"
+                   asp-action="Index"
+                   class="text-decoration-none">
+                    View courses
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Users -->
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col mt-0">
+                        <h5 class="card-title">
+                            Users
+                        </h5>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="stat text-primary">
+                            <i class="align-middle"
+                               data-feather="user-check"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="mt-1 mb-3">
+                    @Model.TotalUsers
+                </h1>
+
+                <span class="text-muted">
+                    System accounts
+                </span>
+
+            </div>
+        </div>
+    </div>
+
+</div>

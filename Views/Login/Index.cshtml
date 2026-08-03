@@ -1,0 +1,288 @@
+﻿@model SIMS.Models.LoginViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+    <meta http-equiv="X-UA-Compatible"
+          content="IE=edge" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
+
+    <title>Sign In | SIMS</title>
+
+    <link rel="shortcut icon"
+          href="~/sims/img/icons/icon-48x48.png" />
+
+    <link href="~/sims/css/app.css"
+          rel="stylesheet" />
+
+    <link href="~/css/Login.css"
+          rel="stylesheet"
+          asp-append-version="true" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet" />
+</head>
+
+<body>
+
+    <main class="login-page">
+
+        <div class="login-shell">
+
+            <section class="login-intro">
+
+                <div class="login-intro-content">
+
+                    <div class="brand">
+
+                        <div class="brand-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round">
+
+                                <path d="M3 7l9-4 9 4-9 4-9-4z"></path>
+                                <path d="M7 9.5v5c0 1.5 2.2 3 5 3s5-1.5 5-3v-5"></path>
+                                <path d="M21 7v6"></path>
+                            </svg>
+                        </div>
+
+                        <span class="brand-name">
+                            SIMS BTEC
+                        </span>
+
+                    </div>
+
+                    <h1>
+                        Smarter learning management in one place
+                    </h1>
+
+                    <p class="login-intro-description">
+                        Manage courses, schedules, attendance, grades and
+                        assignments through one secure student information
+                        management system.
+                    </p>
+
+                    <div class="feature-list">
+
+                        <div class="feature-item">
+                            <span class="feature-check">
+                                <i data-feather="users"></i>
+                            </span>
+
+                            <span>
+                                Manage students and teachers
+                            </span>
+                        </div>
+
+                        <div class="feature-item">
+                            <span class="feature-check">
+                                <i data-feather="calendar"></i>
+                            </span>
+
+                            <span>
+                                View schedules and attendance
+                            </span>
+                        </div>
+
+                        <div class="feature-item">
+                            <span class="feature-check">
+                                <i data-feather="file-text"></i>
+                            </span>
+
+                            <span>
+                                Submit assignments and receive grades
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="login-panel">
+
+                <div class="login-form-wrapper">
+
+                    <div class="mobile-brand">
+                        <i data-feather="book-open"></i>
+                        SIMS BTEC
+                    </div>
+
+                    <div class="login-heading">
+                        <h2>Welcome back</h2>
+
+                        <p>
+                            Sign in with your SIMS account to continue.
+                        </p>
+                    </div>
+
+                    @if (ViewData["InvalidAccount"] != null)
+                    {
+                        <div class="login-alert">
+                            <i data-feather="alert-circle"></i>
+
+                            <span>
+                                @ViewData["InvalidAccount"]
+                            </span>
+                        </div>
+                    }
+
+                    <form asp-controller="Login"
+                          asp-action="Index"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Username"
+                                   class="login-label">
+                                Username
+                            </label>
+
+                            <div class="login-input-wrapper">
+
+                                <i data-feather="user"
+                                   class="login-input-icon"></i>
+
+                                <input asp-for="Username"
+                                       type="text"
+                                       class="login-input"
+                                       placeholder="Enter your username"
+                                       autocomplete="username"
+                                       autofocus />
+
+                            </div>
+
+                            <span asp-validation-for="Username"
+                                  class="validation-message">
+                            </span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Password"
+                                   class="login-label">
+                                Password
+                            </label>
+
+                            <div class="login-input-wrapper">
+
+                                <i data-feather="lock"
+                                   class="login-input-icon"></i>
+
+                                <input asp-for="Password"
+                                       id="passwordInput"
+                                       type="password"
+                                       class="login-input"
+                                       placeholder="Enter your password"
+                                       autocomplete="current-password" />
+
+                                <button type="button"
+                                        id="togglePassword"
+                                        class="password-button"
+                                        aria-label="Show or hide password">
+
+                                    <i data-feather="eye"
+                                       id="passwordIcon"></i>
+
+                                </button>
+
+                            </div>
+
+                            <span asp-validation-for="Password"
+                                  class="validation-message">
+                            </span>
+
+                        </div>
+
+                        <button type="submit"
+                                class="sign-in-button">
+                            Sign in
+                        </button>
+
+                    </form>
+
+                    <div class="login-security">
+                        <i data-feather="shield"></i>
+
+                        <span>
+                            Secure account authentication
+                        </span>
+                    </div>
+
+                    <div class="login-footer">
+                        © @DateTime.Now.Year SIMS BTEC<br />
+                        Student Information Management System
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <script src="~/sims/js/app.js"></script>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const passwordInput =
+                    document.getElementById("passwordInput");
+
+                const togglePassword =
+                    document.getElementById("togglePassword");
+
+                const passwordIcon =
+                    document.getElementById("passwordIcon");
+
+                if (togglePassword && passwordInput && passwordIcon) {
+                    togglePassword.addEventListener("click", function () {
+                        const hidden =
+                            passwordInput.type === "password";
+
+                        passwordInput.type =
+                            hidden ? "text" : "password";
+
+                        passwordIcon.setAttribute(
+                            "data-feather",
+                            hidden ? "eye-off" : "eye"
+                        );
+
+                        if (window.feather) {
+                            feather.replace();
+                        }
+                    });
+                }
+
+                if (window.feather) {
+                    feather.replace();
+                }
+            });
+    </script>
+
+</body>
+
+</html>

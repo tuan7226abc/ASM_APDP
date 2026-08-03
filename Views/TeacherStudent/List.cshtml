@@ -1,0 +1,63 @@
+﻿@model IEnumerable<SIMS.DatabaseContext.Entities.Student>
+
+@{
+    ViewData["Title"] = "Student List";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Student List</h1>
+
+    <p class="text-muted">
+        Course:
+        <strong>@ViewBag.CourseName</strong>
+    </p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Student Code</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="4"
+                            class="text-center text-muted">
+                            This course has no students.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var student in Model)
+                    {
+                        <tr>
+                            <td>@student.StudentCode</td>
+                            <td>@student.FullName</td>
+                            <td>@student.Email</td>
+                            <td>@student.Phone</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+            Back
+        </a>
+
+    </div>
+</div>

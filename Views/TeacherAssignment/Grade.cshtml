@@ -1,0 +1,148 @@
+﻿@model SIMS.Models.GradeSubmissionViewModel
+
+@{
+    ViewData["Title"] = "Grade Submission";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Grade Submission</h1>
+
+    <p class="text-muted">
+        Enter the student's score and feedback
+    </p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <form asp-controller="TeacherAssignment"
+              asp-action="Grade"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input asp-for="SubmissionId"
+                   type="hidden" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        Student Code
+                    </label>
+
+                    <input value="@Model.StudentCode"
+                           class="form-control"
+                           readonly />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        Student Name
+                    </label>
+
+                    <input value="@Model.StudentName"
+                           class="form-control"
+                           readonly />
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Assignment
+                </label>
+
+                <input value="@Model.AssignmentTitle"
+                       class="form-control"
+                       readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Submitted PDF
+                </label>
+
+                <div class="input-group">
+                    <input value="@Model.FileName"
+                           class="form-control"
+                           readonly />
+
+                    <a asp-action="Download"
+                       asp-route-id="@Model.SubmissionId"
+                       class="btn btn-success">
+                        Download PDF
+                    </a>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Submitted At
+                </label>
+
+                <input value="@Model.SubmittedAt.ToString("dd/MM/yyyy HH:mm")"
+                       class="form-control"
+                       readonly />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Score"
+                       class="form-label">
+                    Score
+                </label>
+
+                <input asp-for="Score"
+                       type="number"
+                       min="0"
+                       max="10"
+                       step="0.01"
+                       class="form-control"
+                       placeholder="Enter score from 0 to 10" />
+
+                <span asp-validation-for="Score"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Feedback"
+                       class="form-label">
+                    Feedback
+                </label>
+
+                <textarea asp-for="Feedback"
+                          class="form-control"
+                          rows="6"
+                          placeholder="Enter feedback for the student">
+                </textarea>
+
+                <span asp-validation-for="Feedback"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Save Grade
+            </button>
+
+            <button type="button"
+                    class="btn btn-secondary"
+                    onclick="history.back();">
+                Back
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

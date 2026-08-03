@@ -1,0 +1,45 @@
+﻿@model SIMS.DatabaseContext.Entities.Teacher
+
+@{
+    ViewData["Title"] = "Create Student";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<h2>Add Teacher</h2>
+
+<form asp-action="Create">
+
+    <div class="mb-3">
+        <label>Teacher Code</label>
+        <input asp-for="TeacherCode" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Full Name</label>
+        <input asp-for="FullName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Phone</label>
+        <input asp-for="Phone" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Department</label>
+        <input asp-for="Department" class="form-control" />
+    </div>
+
+    <button class="btn btn-success">
+        Save
+    </button>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Back
+    </a>
+
+</form>

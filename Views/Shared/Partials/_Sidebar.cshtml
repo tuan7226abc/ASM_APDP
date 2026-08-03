@@ -1,0 +1,345 @@
+﻿@{
+    string controller =
+        ViewContext.RouteData.Values["Controller"]?.ToString() ?? "";
+
+    string dashboard =
+        controller == "Dashboard" ? "active" : "";
+
+    string student =
+        controller == "Student" ? "active" : "";
+
+    string course =
+        controller == "Course" ? "active" : "";
+
+    string teacher =
+        controller == "Teacher" ? "active" : "";
+
+    string user =
+        controller == "User" ? "active" : "";
+
+    string schedule =
+        controller == "Schedule" ? "active" : "";
+
+    string teacherDashboard =
+        controller == "TeacherDashboard" ? "active" : "";
+
+    string teacherAttendance =
+        controller == "TeacherAttendance" ? "active" : "";
+
+    string teacherGrade =
+        controller == "TeacherGrade" ? "active" : "";
+
+    string teacherSchedule =
+        controller == "TeacherSchedule" ? "active" : "";
+
+    string teacherStudent =
+        controller == "TeacherStudent" ? "active" : "";
+
+    string teacherAssignment =
+        controller == "TeacherAssignment" ? "active" : "";
+
+    string studentDashboard =
+        controller == "StudentDashboard" ? "active" : "";
+
+    string studentCourse =
+        controller == "StudentCourse" ? "active" : "";
+
+    string studentSchedule =
+        controller == "StudentSchedule" ? "active" : "";
+
+    string studentGrade =
+        controller == "StudentGrade" ? "active" : "";
+
+    string studentAttendance =
+        controller == "StudentAttendance" ? "active" : "";
+
+    string studentAssignment =
+        controller == "StudentAssignment" ? "active" : "";
+}
+
+<nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+
+        <a class="sidebar-brand"
+           asp-controller="Login"
+           asp-action="Index">
+
+            <span class="align-middle">
+                SIMS BTEC
+            </span>
+        </a>
+
+        <ul class="sidebar-nav">
+
+            <li class="sidebar-header">
+                Pages
+            </li>
+
+            @* ================= ADMIN ================= *@
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="sidebar-item @dashboard">
+                    <a class="sidebar-link"
+                       asp-controller="Dashboard"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="sliders"></i>
+
+                        <span class="align-middle">
+                            Dashboard
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @student">
+                    <a class="sidebar-link"
+                       asp-controller="Student"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="user"></i>
+
+                        <span class="align-middle">
+                            Students
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @course">
+                    <a class="sidebar-link"
+                       asp-controller="Course"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="book"></i>
+
+                        <span class="align-middle">
+                            Courses
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @teacher">
+                    <a class="sidebar-link"
+                       asp-controller="Teacher"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="users"></i>
+
+                        <span class="align-middle">
+                            Teachers
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @user">
+                    <a class="sidebar-link"
+                       asp-controller="User"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="user-check"></i>
+
+                        <span class="align-middle">
+                            Users
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @schedule">
+                    <a class="sidebar-link"
+                       asp-controller="Schedule"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="calendar"></i>
+
+                        <span class="align-middle">
+                            Schedules
+                        </span>
+                    </a>
+                </li>
+            }
+
+            @* ================= TEACHER ================= *@
+            @if (User.IsInRole("Teacher"))
+            {
+                <li class="sidebar-item @teacherDashboard">
+                    <a class="sidebar-link"
+                       asp-controller="TeacherDashboard"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="sliders"></i>
+
+                        <span class="align-middle">
+                            Teacher Dashboard
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @teacherAttendance">
+                    <a class="sidebar-link"
+                       asp-controller="TeacherAttendance"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="check-square"></i>
+
+                        <span class="align-middle">
+                            Attendance
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @teacherGrade">
+                    <a class="sidebar-link"
+                       asp-controller="TeacherGrade"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="edit-3"></i>
+
+                        <span class="align-middle">
+                            Grade Management
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @teacherSchedule">
+                    <a class="sidebar-link"
+                       asp-controller="TeacherSchedule"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="calendar"></i>
+
+                        <span class="align-middle">
+                            My Schedule
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @teacherStudent">
+                    <a class="sidebar-link"
+                       asp-controller="TeacherStudent"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="users"></i>
+
+                        <span class="align-middle">
+                            My Students
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @teacherAssignment">
+                    <a class="sidebar-link"
+                       asp-controller="TeacherAssignment"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="file-text"></i>
+
+                        <span class="align-middle">
+                            Assignments
+                        </span>
+                    </a>
+                </li>
+            }
+
+            @* ================= STUDENT ================= *@
+            @if (User.IsInRole("Student"))
+            {
+                <li class="sidebar-item @studentDashboard">
+                    <a class="sidebar-link"
+                       asp-controller="StudentDashboard"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="home"></i>
+
+                        <span class="align-middle">
+                            Student Dashboard
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @studentCourse">
+                    <a class="sidebar-link"
+                       asp-controller="StudentCourse"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="book-open"></i>
+
+                        <span class="align-middle">
+                            My Courses
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @studentSchedule">
+                    <a class="sidebar-link"
+                       asp-controller="StudentSchedule"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="calendar"></i>
+
+                        <span class="align-middle">
+                            My Schedule
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @studentGrade">
+                    <a class="sidebar-link"
+                       asp-controller="StudentGrade"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="award"></i>
+
+                        <span class="align-middle">
+                            My Grades
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @studentAttendance">
+                    <a class="sidebar-link"
+                       asp-controller="StudentAttendance"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="check-square"></i>
+
+                        <span class="align-middle">
+                            My Attendance
+                        </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @studentAssignment">
+                    <a class="sidebar-link"
+                       asp-controller="StudentAssignment"
+                       asp-action="Index">
+
+                        <i class="align-middle"
+                           data-feather="upload"></i>
+
+                        <span class="align-middle">
+                            My Assignments
+                        </span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+
+    </div>
+</nav>

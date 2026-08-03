@@ -1,0 +1,219 @@
+﻿@{
+    string displayName = User.Identity?.Name ?? "Account";
+    string role = User.FindFirst(
+        System.Security.Claims.ClaimTypes.Role)?.Value ?? "";
+}
+
+<nav class="navbar navbar-expand navbar-light navbar-bg">
+
+    <a class="sidebar-toggle js-sidebar-toggle">
+        <i class="hamburger align-self-center"></i>
+    </a>
+
+    <div class="navbar-collapse collapse">
+
+        <ul class="navbar-nav navbar-align">
+
+            <!-- Notifications -->
+            <li class="nav-item dropdown">
+
+                <a class="nav-icon dropdown-toggle"
+                   href="#"
+                   id="alertsDropdown"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false">
+
+                    <div class="position-relative">
+                        <i class="align-middle"
+                           data-feather="bell"></i>
+
+                        <span class="indicator">
+                            4
+                        </span>
+                    </div>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0"
+                     aria-labelledby="alertsDropdown">
+
+                    <div class="dropdown-menu-header">
+                        4 New Notifications
+                    </div>
+
+                    <div class="list-group">
+
+                        <div class="list-group-item">
+                            <div class="row g-0 align-items-center">
+
+                                <div class="col-2">
+                                    <i class="text-primary"
+                                       data-feather="info"></i>
+                                </div>
+
+                                <div class="col-10">
+                                    <div class="text-dark">
+                                        Welcome to SIMS
+                                    </div>
+
+                                    <div class="text-muted small mt-1">
+                                        Your account is ready to use.
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="dropdown-menu-footer">
+                        <a href="#"
+                           class="text-muted">
+                            Show all notifications
+                        </a>
+                    </div>
+
+                </div>
+
+            </li>
+
+            <!-- Messages -->
+            <li class="nav-item dropdown">
+
+                <a class="nav-icon dropdown-toggle"
+                   href="#"
+                   id="messagesDropdown"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false">
+
+                    <div class="position-relative">
+                        <i class="align-middle"
+                           data-feather="message-square"></i>
+                    </div>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0"
+                     aria-labelledby="messagesDropdown">
+
+                    <div class="dropdown-menu-header">
+                        Messages
+                    </div>
+
+                    <div class="p-3 text-center text-muted">
+                        No new messages.
+                    </div>
+
+                </div>
+
+            </li>
+
+            <!-- Account dropdown -->
+            <li class="nav-item dropdown">
+
+                <a class="nav-link dropdown-toggle d-flex align-items-center"
+                   href="#"
+                   id="userDropdown"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false">
+
+                    <!-- Không dùng ảnh lỗi nữa -->
+                    <span class="avatar-sm rounded-circle bg-primary text-white
+                        d-inline-flex align-items-center justify-content-center me-2"
+                          style="width: 36px; height: 36px;">
+
+                        <i data-feather="user"
+                           style="width: 19px; height: 19px;"></i>
+                    </span>
+
+                    <!-- Chỉ hiện username một lần -->
+                    <span class="text-dark">
+                        @displayName
+                    </span>
+
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end"
+                     aria-labelledby="userDropdown">
+
+                    <div class="px-3 py-2 border-bottom">
+
+                        <div class="fw-bold">
+                            @displayName
+                        </div>
+
+                        <small class="text-muted">
+                            @role
+                        </small>
+
+                    </div>
+
+                    <a class="dropdown-item"
+                       asp-controller="Profile"
+                       asp-action="Index">
+
+                        <i class="align-middle me-2"
+                           data-feather="user"></i>
+
+                        Profile
+                    </a>
+
+                    <a class="dropdown-item"
+                       asp-controller="AccountMenu"
+                       asp-action="Analytics">
+
+                        <i class="align-middle me-2"
+                           data-feather="pie-chart"></i>
+
+                        Analytics
+                    </a>
+
+                    <div class="dropdown-divider"></div>
+
+                    <a class="dropdown-item"
+                       asp-controller="AccountMenu"
+                       asp-action="Settings">
+
+                        <i class="align-middle me-2"
+                           data-feather="settings"></i>
+
+                        Settings &amp; Privacy
+                    </a>
+
+                    <a class="dropdown-item"
+                       asp-controller="AccountMenu"
+                       asp-action="Help">
+
+                        <i class="align-middle me-2"
+                           data-feather="help-circle"></i>
+
+                        Help Center
+                    </a>
+
+                    <div class="dropdown-divider"></div>
+
+                    <form asp-controller="Login"
+                          asp-action="Logout"
+                          method="post"
+                          class="m-0">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="dropdown-item">
+
+                            <i class="align-middle me-2"
+                               data-feather="log-out"></i>
+
+                            Log out
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+</nav>

@@ -1,0 +1,83 @@
+﻿@model SIMS.Models.SubmitAssignmentViewModel
+
+@{
+    ViewData["Title"] = "Submit Assignment";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Submit Assignment</h1>
+
+    <p class="text-muted">
+        Upload your assignment as a PDF file
+    </p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <dl class="row">
+            <dt class="col-sm-3">Assignment</dt>
+            <dd class="col-sm-9">
+                @Model.AssignmentTitle
+            </dd>
+
+            <dt class="col-sm-3">Course</dt>
+            <dd class="col-sm-9">
+                @Model.CourseName
+            </dd>
+
+            <dt class="col-sm-3">Due date</dt>
+            <dd class="col-sm-9">
+                @Model.DueDate.ToString("dd/MM/yyyy HH:mm")
+            </dd>
+        </dl>
+
+        <form asp-action="Submit"
+              method="post"
+              enctype="multipart/form-data">
+
+            <input type="hidden"
+                   asp-for="AssignmentId" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PdfFile"
+                       class="form-label">
+                    PDF file
+                </label>
+
+                <input asp-for="PdfFile"
+                       type="file"
+                       accept=".pdf,application/pdf"
+                       class="form-control" />
+
+                <span asp-validation-for="PdfFile"
+                      class="text-danger">
+                </span>
+
+                <div class="form-text">
+                    Only PDF files, maximum 10 MB.
+                </div>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Submit Assignment
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Back
+            </a>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

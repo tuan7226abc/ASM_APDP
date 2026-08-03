@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Analytics";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Analytics</h1>
+
+    <p class="text-muted">
+        View your activity information in the SIMS system.
+    </p>
+</div>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Account Role
+                </h5>
+
+                <h2>
+                    @User.FindFirst(
+                        System.Security.Claims.ClaimTypes.Role)?.Value
+                </h2>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Account Status
+                </h5>
+
+                <h2 class="text-success">
+                    Active
+                </h2>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Signed in as
+                </h5>
+
+                <h2>
+                    @User.Identity?.Name
+                </h2>
+
+            </div>
+        </div>
+    </div>
+
+</div>

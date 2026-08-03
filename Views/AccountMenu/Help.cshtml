@@ -1,0 +1,109 @@
+﻿@{
+    ViewData["Title"] = "Help Center";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Help Center</h1>
+
+    <p class="text-muted">
+        Find answers and instructions for using SIMS.
+    </p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <div class="accordion"
+             id="helpAccordion">
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header">
+
+                    <button class="accordion-button"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#helpOne">
+
+                        How do I update my profile?
+
+                    </button>
+
+                </h2>
+
+                <div id="helpOne"
+                     class="accordion-collapse collapse show"
+                     data-bs-parent="#helpAccordion">
+
+                    <div class="accordion-body">
+                        Open the account menu and select
+                        <strong>Profile</strong>. You can update permitted
+                        personal information and save the changes.
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header">
+
+                    <button class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#helpTwo">
+
+                        How does a student submit an assignment?
+
+                    </button>
+
+                </h2>
+
+                <div id="helpTwo"
+                     class="accordion-collapse collapse"
+                     data-bs-parent="#helpAccordion">
+
+                    <div class="accordion-body">
+                        Open <strong>My Assignments</strong>, select an
+                        assignment and upload a valid PDF file before its
+                        deadline.
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header">
+
+                    <button class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#helpThree">
+
+                        How does a teacher grade a submission?
+
+                    </button>
+
+                </h2>
+
+                <div id="helpThree"
+                     class="accordion-collapse collapse"
+                     data-bs-parent="#helpAccordion">
+
+                    <div class="accordion-body">
+                        Open <strong>Assignments</strong>, view submissions,
+                        download the PDF and select <strong>Grade</strong>.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>

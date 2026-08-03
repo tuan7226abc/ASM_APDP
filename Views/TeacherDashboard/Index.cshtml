@@ -1,0 +1,182 @@
+﻿@model SIMS.Models.TeacherDashboardViewModel
+
+@{
+    ViewData["Title"] = "Teacher Dashboard";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Teacher Dashboard</h1>
+
+    <p class="text-muted">
+        Welcome,
+        <strong>
+            @(string.IsNullOrWhiteSpace(Model.TeacherName)
+                ? "Teacher"
+                : Model.TeacherName)
+        </strong>
+    </p>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<div class="row">
+    <div class="col-sm-6 col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col mt-0">
+                        <h5 class="card-title">My Courses</h5>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="stat text-primary">
+                            <i class="align-middle"
+                               data-feather="book-open"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="mt-1 mb-3">
+                    @Model.TotalCourses
+                </h1>
+
+                <a asp-controller="TeacherGrade"
+                   asp-action="Index"
+                   class="text-decoration-none">
+                    View courses
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col mt-0">
+                        <h5 class="card-title">My Students</h5>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="stat text-primary">
+                            <i class="align-middle"
+                               data-feather="users"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="mt-1 mb-3">
+                    @Model.TotalStudents
+                </h1>
+
+                <a asp-controller="TeacherStudent"
+                   asp-action="Index"
+                   class="text-decoration-none">
+                    View students
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col mt-0">
+                        <h5 class="card-title">
+                            Today's Classes
+                        </h5>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="stat text-primary">
+                            <i class="align-middle"
+                               data-feather="calendar"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="mt-1 mb-3">
+                    @Model.TodayClasses
+                </h1>
+
+                <a asp-controller="TeacherAttendance"
+                   asp-action="Index"
+                   class="text-decoration-none">
+                    Take attendance
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title mb-0">
+            Today's Teaching Schedule
+        </h5>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Course</th>
+                        <th>Time</th>
+                        <th>Room</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.TodaySchedules == null ||
+                         !Model.TodaySchedules.Any())
+                    {
+                        <tr>
+                            <td colspan="4"
+                                class="text-center text-muted">
+                                You have no classes today.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model.TodaySchedules)
+                        {
+                            <tr>
+                                <td>
+                                    @(item.Course?.CourseName ?? "N/A")
+                                </td>
+
+                                <td>
+                                    @item.StartTime.ToString(@"hh\:mm")
+                                    -
+                                    @item.EndTime.ToString(@"hh\:mm")
+                                </td>
+
+                                <td>@item.Room</td>
+
+                                <td>
+                                    <a asp-controller="TeacherAttendance"
+                                       asp-action="Take"
+                                       asp-route-scheduleId="@item.Id"
+                                       asp-route-date="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                       class="btn btn-primary btn-sm">
+                                        Take Attendance
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

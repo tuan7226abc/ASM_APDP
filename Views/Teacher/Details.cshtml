@@ -1,0 +1,43 @@
+﻿@model SIMS.DatabaseContext.Entities.Teacher
+
+@{
+    ViewData["Title"] = "Teacher Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="mb-4">Teacher Details</h2>
+
+        <dl class="row">
+            <dt class="col-sm-3">Teacher Code</dt>
+            <dd class="col-sm-9">@Model.TeacherCode</dd>
+
+            <dt class="col-sm-3">Full Name</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Phone</dt>
+            <dd class="col-sm-9">@Model.Phone</dd>
+
+            <dt class="col-sm-3">Department</dt>
+            <dd class="col-sm-9">@Model.Department</dd>
+
+            <dt class="col-sm-3">Created Date</dt>
+            <dd class="col-sm-9">@Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")</dd>
+        </dl>
+
+        <a asp-action="Edit"
+           asp-route-id="@Model.Id"
+           class="btn btn-warning">
+            Edit
+        </a>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+            Back to List
+        </a>
+    </div>
+</div>

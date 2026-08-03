@@ -1,0 +1,46 @@
+﻿@using SIMS.DatabaseContext.Entities
+@{
+    ViewData["Title"] = "Enroll Course";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var student = ViewBag.Student as Student;
+    var courses = ViewBag.Courses as IEnumerable<Course>;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Enroll Course for: <strong>@student?.FullName</strong></h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        @if (courses == null || !courses.Any())
+        {
+            <div class="alert alert-info">
+                This student has already enrolled in all available courses.
+            </div>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        }
+        else
+        {
+            <form asp-action="Enroll" method="post">
+                <input type="hidden" name="studentId" value="@student?.Id" />
+
+                <div class="mb-3">
+                    <label class="form-label">Select Course</label>
+                    <select name="courseId" class="form-select" required>
+                        <option value="">-- Select a course --</option>
+                        @foreach (var course in courses)
+                        {
+                            <option value="@course.Id">
+                                @course.CourseCode - @course.CourseName (@course.Credits credits)
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success">Enroll</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        }
+    </div>
+</div>

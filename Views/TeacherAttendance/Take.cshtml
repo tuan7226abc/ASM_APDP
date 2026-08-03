@@ -1,0 +1,166 @@
+﻿@model SIMS.Models.AttendanceViewModel
+
+@{
+    ViewData["Title"] = "Take Attendance";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Take Attendance</h1>
+
+    <p class="text-muted">
+        Course: <strong>@Model.CourseName</strong> |
+        Teacher: <strong>@Model.TeacherName</strong> |
+        Room: <strong>@Model.Room</strong>
+    </p>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+
+        <form asp-action="Take" method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <input type="hidden"
+                   asp-for="ScheduleId" />
+
+            <input type="hidden"
+                   asp-for="CourseName" />
+
+            <input type="hidden"
+                   asp-for="TeacherName" />
+
+            <input type="hidden"
+                   asp-for="Room" />
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label asp-for="AttendanceDate"
+                           class="form-label">
+                        Attendance Date
+                    </label>
+
+                    <input asp-for="AttendanceDate"
+                           type="date"
+                           class="form-control" />
+
+                    <span asp-validation-for="AttendanceDate"
+                          class="text-danger">
+                    </span>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 60px;">No.</th>
+                            <th>Student Code</th>
+                            <th>Full Name</th>
+                            <th style="width: 180px;">Status</th>
+                            <th>Note</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (!Model.Students.Any())
+                        {
+                            <tr>
+                                <td colspan="5"
+                                    class="text-center text-muted">
+                                    This course has no students.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @for (int i = 0;
+                                i < Model.Students.Count;
+                                i++)
+                            {
+                                <tr>
+                                    <td>@(i + 1)</td>
+
+                                    <td>
+                                        @Model.Students[i].StudentCode
+
+                                        <input type="hidden"
+                                               asp-for="Students[i].StudentId" />
+
+                                        <input type="hidden"
+                                               asp-for="Students[i].StudentCode" />
+
+                                        <input type="hidden"
+                                               asp-for="Students[i].FullName" />
+                                    </td>
+
+                                    <td>
+                                        @Model.Students[i].FullName
+                                    </td>
+
+                                    <td>
+                                        <select asp-for="Students[i].Status"
+                                                class="form-select">
+
+                                            <option value="Present">
+                                                Present
+                                            </option>
+
+                                            <option value="Absent">
+                                                Absent
+                                            </option>
+
+                                            <option value="Late">
+                                                Late
+                                            </option>
+
+                                            <option value="Excused">
+                                                Excused
+                                            </option>
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <input asp-for="Students[i].Note"
+                                               class="form-control"
+                                               placeholder="Optional note" />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+
+            @if (Model.Students.Any())
+            {
+                <button type="submit"
+                        class="btn btn-primary">
+                    Save Attendance
+                </button>
+            }
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Back
+            </a>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

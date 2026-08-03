@@ -1,0 +1,44 @@
+﻿@model SIMS.DatabaseContext.Entities.Course
+@{
+    ViewData["Title"] = "Create Course";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="h3 mb-3">Create Course</h1>
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label class="form-label">Course Code *</label>
+                <input asp-for="CourseCode" class="form-control" required />
+                <span asp-validation-for="CourseCode" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Course Name *</label>
+                <input asp-for="CourseName" class="form-control" required />
+                <span asp-validation-for="CourseName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Credits</label>
+                <input asp-for="Credits" type="number" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Max Students</label>
+                <input asp-for="MaxStudents" type="number" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </form>
+    </div>
+</div>

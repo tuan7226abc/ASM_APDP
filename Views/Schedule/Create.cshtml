@@ -1,0 +1,166 @@
+﻿@model SIMS.DatabaseContext.Entities.Schedule
+
+@{
+    ViewData["Title"] = "Add Schedule";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Add Schedule</h1>
+    <p class="text-muted">Create a new timetable entry</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <form asp-action="Create" method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="CourseId"
+                           class="form-label">
+                        Course
+                    </label>
+
+                    <select asp-for="CourseId"
+                            asp-items="ViewBag.CourseId"
+                            class="form-select">
+                        <option value="">-- Select Course --</option>
+                    </select>
+
+                    <span asp-validation-for="CourseId"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="TeacherId"
+                           class="form-label">
+                        Teacher
+                    </label>
+
+                    <select asp-for="TeacherId"
+                            asp-items="ViewBag.TeacherId"
+                            class="form-select">
+                        <option value="">-- Select Teacher --</option>
+                    </select>
+
+                    <span asp-validation-for="TeacherId"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="DayOfWeek"
+                           class="form-label">
+                        Day of Week
+                    </label>
+
+                    <select asp-for="DayOfWeek"
+                            class="form-select">
+                        <option value="2">Monday</option>
+                        <option value="3">Tuesday</option>
+                        <option value="4">Wednesday</option>
+                        <option value="5">Thursday</option>
+                        <option value="6">Friday</option>
+                        <option value="7">Saturday</option>
+                        <option value="8">Sunday</option>
+                    </select>
+
+                    <span asp-validation-for="DayOfWeek"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label asp-for="StartTime"
+                           class="form-label">
+                        Start Time
+                    </label>
+
+                    <input asp-for="StartTime"
+                           type="time"
+                           class="form-control" />
+
+                    <span asp-validation-for="StartTime"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label asp-for="EndTime"
+                           class="form-label">
+                        End Time
+                    </label>
+
+                    <input asp-for="EndTime"
+                           type="time"
+                           class="form-control" />
+
+                    <span asp-validation-for="EndTime"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Room"
+                           class="form-label">
+                        Room
+                    </label>
+
+                    <input asp-for="Room"
+                           class="form-control"
+                           placeholder="Example: A101" />
+
+                    <span asp-validation-for="Room"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label asp-for="StartDate"
+                           class="form-label">
+                        Start Date
+                    </label>
+
+                    <input asp-for="StartDate"
+                           type="date"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label asp-for="EndDate"
+                           class="form-label">
+                        End Date
+                    </label>
+
+                    <input asp-for="EndDate"
+                           type="date"
+                           class="form-control" />
+                </div>
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Save
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Back to List
+            </a>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

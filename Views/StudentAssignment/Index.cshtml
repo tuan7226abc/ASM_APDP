@@ -1,0 +1,154 @@
+﻿@model IEnumerable<SIMS.DatabaseContext.Entities.Assignment>
+
+@{
+    ViewData["Title"] = "My Assignments";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var submittedIds =
+        ViewBag.SubmittedAssignmentIds as List<int>
+        ?? new List<int>();
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">My Assignments</h1>
+
+    <p class="text-muted">
+        View assignments and submit PDF files
+    </p>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Course</th>
+                        <th>Assignment</th>
+                        <th>Description</th>
+                        <th>Due Date</th>
+                        <th>Maximum Score</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7"
+                                class="text-center text-muted">
+                                No assignments found.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            bool submitted =
+                                submittedIds.Contains(item.Id);
+
+                            bool expired =
+                                DateTime.Now > item.DueDate;
+
+                            <tr>
+                                <td>
+                                    @(item.Course?.CourseName ?? "N/A")
+                                </td>
+
+                                <td>@item.Title</td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(
+                                        item.Description)
+                                        ? "-"
+                                        : item.Description)
+                                </td>
+
+                                <td>
+                                    @item.DueDate.ToString(
+                                        "dd/MM/yyyy HH:mm")
+                                </td>
+
+                                <td>
+                                    @item.MaxScore.ToString("0.##")
+                                </td>
+
+                                <td>
+                                    @if (submitted)
+                                    {
+                                        <span class="badge bg-success">
+                                            Submitted
+                                        </span>
+                                    }
+                                    else if (expired)
+                                    {
+                                        <span class="badge bg-danger">
+                                            Overdue
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">
+                                            Not submitted
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (submitted)
+                                    {
+                                        <span class="text-success">
+                                            Submission completed
+                                        </span>
+                                    }
+                                    else if (expired)
+                                    {
+                                        <button class="btn btn-secondary btn-sm"
+                                                disabled>
+                                            Closed
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Submit"
+                                           asp-route-id="@item.Id"
+                                           class="btn btn-primary btn-sm">
+                                            Submit PDF
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>

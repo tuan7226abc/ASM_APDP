@@ -1,0 +1,196 @@
+﻿@model SIMS.Models.GradeViewModel
+
+@{
+    ViewData["Title"] = "Manage Grades";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Manage Grades</h1>
+
+    <p class="text-muted">
+        Course: <strong>@Model.CourseName</strong> |
+        Teacher: <strong>@Model.TeacherName</strong>
+    </p>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+
+        <form asp-action="Manage" method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <input type="hidden" asp-for="CourseId" />
+            <input type="hidden" asp-for="CourseName" />
+            <input type="hidden" asp-for="TeacherName" />
+
+            <div class="alert alert-info">
+                Total score = Assignment 20% +
+                Midterm 30% + Final 50%
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>No.</th>
+                            <th>Student Code</th>
+                            <th>Full Name</th>
+                            <th>Assignment</th>
+                            <th>Midterm</th>
+                            <th>Final</th>
+                            <th>Total</th>
+                            <th>Note</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (!Model.Students.Any())
+                        {
+                            <tr>
+                                <td colspan="8"
+                                    class="text-center text-muted">
+                                    This course has no students.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @for (int i = 0;
+                                i < Model.Students.Count;
+                                i++)
+                            {
+                                <tr>
+                                    <td>@(i + 1)</td>
+
+                                    <td>
+                                        @Model.Students[i].StudentCode
+
+                                        <input type="hidden"
+                                               asp-for="Students[i].StudentId" />
+
+                                        <input type="hidden"
+                                               asp-for="Students[i].StudentCode" />
+
+                                        <input type="hidden"
+                                               asp-for="Students[i].FullName" />
+                                    </td>
+
+                                    <td>
+                                        @Model.Students[i].FullName
+                                    </td>
+
+                                    <td>
+                                        <input asp-for="Students[i].AssignmentScore"
+                                               type="number"
+                                               min="0"
+                                               max="10"
+                                               step="0.01"
+                                               class="form-control score-input" />
+                                    </td>
+
+                                    <td>
+                                        <input asp-for="Students[i].MidtermScore"
+                                               type="number"
+                                               min="0"
+                                               max="10"
+                                               step="0.01"
+                                               class="form-control score-input" />
+                                    </td>
+
+                                    <td>
+                                        <input asp-for="Students[i].FinalScore"
+                                               type="number"
+                                               min="0"
+                                               max="10"
+                                               step="0.01"
+                                               class="form-control score-input" />
+                                    </td>
+
+                                    <td>
+                                        <input asp-for="Students[i].TotalScore"
+                                               class="form-control total-score"
+                                               readonly />
+                                    </td>
+
+                                    <td>
+                                        <input asp-for="Students[i].Note"
+                                               class="form-control"
+                                               placeholder="Optional note" />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+
+            @if (Model.Students.Any())
+            {
+                <button type="submit"
+                        class="btn btn-primary">
+                    Save Grades
+                </button>
+            }
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Back
+            </a>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.querySelectorAll("tbody tr").forEach(function (row) {
+            const scores = row.querySelectorAll(".score-input");
+            const total = row.querySelector(".total-score");
+
+            function calculateTotal() {
+                if (!total || scores.length !== 3) {
+                    return;
+                }
+
+                const assignment =
+                    parseFloat(scores[0].value) || 0;
+
+                const midterm =
+                    parseFloat(scores[1].value) || 0;
+
+                const finalScore =
+                    parseFloat(scores[2].value) || 0;
+
+                const result =
+                    assignment * 0.20 +
+                    midterm * 0.30 +
+                    finalScore * 0.50;
+
+                total.value = result.toFixed(2);
+            }
+
+            scores.forEach(function (input) {
+                input.addEventListener(
+                    "input",
+                    calculateTotal);
+            });
+
+            calculateTotal();
+        });
+    </script>
+}

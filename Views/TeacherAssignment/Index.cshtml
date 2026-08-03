@@ -1,0 +1,117 @@
+﻿@model IEnumerable<SIMS.DatabaseContext.Entities.Assignment>
+
+@{
+    ViewData["Title"] = "Assignments";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Assignment Management</h1>
+
+    <p class="text-muted">
+        Create assignments and grade student PDF submissions
+    </p>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+
+        <div class="mb-3">
+            <a asp-action="Create"
+               class="btn btn-primary">
+                Create Assignment
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Course</th>
+                        <th>Due Date</th>
+                        <th>Maximum Score</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6"
+                                class="text-center text-muted">
+                                No assignments found.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            bool expired =
+                                DateTime.Now > item.DueDate;
+
+                            <tr>
+                                <td>@item.Title</td>
+
+                                <td>
+                                    @(item.Course?.CourseName ?? "N/A")
+                                </td>
+
+                                <td>
+                                    @item.DueDate.ToString(
+                                        "dd/MM/yyyy HH:mm")
+                                </td>
+
+                                <td>
+                                    @item.MaxScore.ToString("0.##")
+                                </td>
+
+                                <td>
+                                    @if (expired)
+                                    {
+                                        <span class="badge bg-danger">
+                                            Closed
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">
+                                            Open
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <a asp-action="Submissions"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-info btn-sm">
+                                        View Submissions
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,98 @@
+﻿@model IEnumerable<SIMS.DatabaseContext.Entities.Schedule>
+
+@{
+    ViewData["Title"] = "My Schedule";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">My Schedule</h1>
+
+    <p class="text-muted">
+        Timetable of
+        <strong>@ViewBag.StudentName</strong>
+    </p>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Course</th>
+                        <th>Teacher</th>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Room</th>
+                        <th>Teaching Period</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6"
+                                class="text-center text-muted">
+                                No schedules found.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            string dayName = item.DayOfWeek switch
+                            {
+                                2 => "Monday",
+                                3 => "Tuesday",
+                                4 => "Wednesday",
+                                5 => "Thursday",
+                                6 => "Friday",
+                                7 => "Saturday",
+                                8 => "Sunday",
+                                _ => "Unknown"
+                            };
+
+                            <tr>
+                                <td>
+                                    @(item.Course?.CourseName ?? "N/A")
+                                </td>
+
+                                <td>
+                                    @(item.Teacher?.FullName ?? "N/A")
+                                </td>
+
+                                <td>@dayName</td>
+
+                                <td>
+                                    @item.StartTime.ToString(@"hh\:mm")
+                                    -
+                                    @item.EndTime.ToString(@"hh\:mm")
+                                </td>
+
+                                <td>@item.Room</td>
+
+                                <td>
+                                    @(item.StartDate?.ToString("dd/MM/yyyy") ?? "-")
+                                    -
+                                    @(item.EndDate?.ToString("dd/MM/yyyy") ?? "-")
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

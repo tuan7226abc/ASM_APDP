@@ -1,0 +1,123 @@
+﻿@model SIMS.DatabaseContext.Entities.Assignment
+
+@{
+    ViewData["Title"] = "Create Assignment";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">Create Assignment</h1>
+    <p class="text-muted">
+        Create a new PDF submission assignment
+    </p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <form asp-action="Create" method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CourseId"
+                       class="form-label">
+                    Course
+                </label>
+
+                <select asp-for="CourseId"
+                        asp-items="ViewBag.CourseId"
+                        class="form-select">
+
+                    <option value="">
+                        -- Select Course --
+                    </option>
+                </select>
+
+                <span asp-validation-for="CourseId"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Title"
+                       class="form-label">
+                    Assignment Title
+                </label>
+
+                <input asp-for="Title"
+                       class="form-control"
+                       placeholder="Enter assignment title" />
+
+                <span asp-validation-for="Title"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description"
+                       class="form-label">
+                    Description
+                </label>
+
+                <textarea asp-for="Description"
+                          class="form-control"
+                          rows="6"
+                          placeholder="Enter assignment instructions">
+                </textarea>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="DueDate"
+                           class="form-label">
+                        Due Date
+                    </label>
+
+                    <input asp-for="DueDate"
+                           type="datetime-local"
+                           class="form-control" />
+
+                    <span asp-validation-for="DueDate"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="MaxScore"
+                           class="form-label">
+                        Maximum Score
+                    </label>
+
+                    <input asp-for="MaxScore"
+                           type="number"
+                           min="1"
+                           max="100"
+                           step="0.01"
+                           class="form-control" />
+
+                    <span asp-validation-for="MaxScore"
+                          class="text-danger">
+                    </span>
+                </div>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Create Assignment
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Cancel
+            </a>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

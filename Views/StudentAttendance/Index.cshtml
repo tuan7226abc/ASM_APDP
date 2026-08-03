@@ -1,0 +1,164 @@
+﻿@model SIMS.Models.StudentAttendanceViewModel
+
+@{
+    ViewData["Title"] = "My Attendance";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h1 class="h3 mb-1">My Attendance</h1>
+
+    <p class="text-muted">
+        Attendance history of
+        <strong>@ViewBag.StudentName</strong>
+    </p>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<div class="row">
+
+    <div class="col-sm-6 col-xl-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Sessions</h5>
+                <h2>@Model.TotalSessions</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Present</h5>
+                <h2>@Model.PresentCount</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Absent</h5>
+                <h2>@Model.AbsentCount</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Late</h5>
+                <h2>@Model.LateCount</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Excused</h5>
+                <h2>@Model.ExcusedCount</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Rate</h5>
+                <h2>@Model.AttendanceRate%</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Course</th>
+                        <th>Teacher</th>
+                        <th>Room</th>
+                        <th>Status</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (!Model.Attendances.Any())
+                    {
+                        <tr>
+                            <td colspan="6"
+                                class="text-center text-muted">
+                                No attendance records found.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model.Attendances)
+                        {
+                            <tr>
+                                <td>
+                                    @item.AttendanceDate.ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td>@item.CourseName</td>
+
+                                <td>@item.TeacherName</td>
+
+                                <td>@item.Room</td>
+
+                                <td>
+                                    @if (item.Status == "Present")
+                                    {
+                                        <span class="badge bg-success">
+                                            Present
+                                        </span>
+                                    }
+                                    else if (item.Status == "Absent")
+                                    {
+                                        <span class="badge bg-danger">
+                                            Absent
+                                        </span>
+                                    }
+                                    else if (item.Status == "Late")
+                                    {
+                                        <span class="badge bg-warning">
+                                            Late
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info">
+                                            Excused
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(item.Note)
+                                        ? "-"
+                                        : item.Note)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
